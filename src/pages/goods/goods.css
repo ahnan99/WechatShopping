@@ -1,0 +1,17 @@
+.td {
+  width: 50%;
+  justify-content: center;
+  text-align: center;
+}
+
+.tr {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: 10rem;
+  align-items: center;
+}
+
+.bg-g {
+  background: #E6F3F9;
+}

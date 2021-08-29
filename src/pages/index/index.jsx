@@ -1,3 +1,7 @@
+
+import "taro-ui/dist/style/components/search-bar.scss";
+import "taro-ui/dist/style/components/button.scss";
+import "taro-ui/dist/style/components/icon.scss";
 import { Component } from "react";
 import Taro from '@tarojs/taro'
 import { connect } from "react-redux";
@@ -8,7 +12,7 @@ import { actions as UserActions } from "../../modules/user";
 
 import "./index.css";
 
-axios.defaults.baseURL = "https://f909-2409-8a1e-6c67-3d70-285d-2868-a910-6e28.ngrok.io";
+axios.defaults.baseURL = "https://f637-2409-8a1e-6c52-f10-d4fa-570e-ba2c-7b75.ngrok.io";
 //写入信息
 
 axios.interceptors.request.use(function (config) {

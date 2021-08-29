@@ -51,7 +51,8 @@
     "redux-logger": "^3.0.6",
     "redux-saga": "^1.1.3",
     "redux-thunk": "^2.3.0",
-    "taro-axios": "^1.1.1"
+    "taro-axios": "^1.1.1",
+    "taro-ui": "^3.0.0-alpha.3"
   },
   "devDependencies": {
     "@types/webpack-env": "^1.13.6",

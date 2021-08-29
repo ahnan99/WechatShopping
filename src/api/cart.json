@@ -1,0 +1,22 @@
+[
+    {
+        "ID": 1,
+        "memberID": "otXnj5t_xDZIxb7eO2L-m4b_JJbk",
+        "goodsID": "12-3301",
+        "qty": 2,
+        "status": 0,
+        "memo": "",
+        "regDate": "2021-08-25",
+        "goodsName": "长白山人参切片",
+        "size": "盒装",
+        "weight": 500,
+        "weight_unit": "g",
+        "price": 600,
+        "discountPrice": 600,
+        "total": 1200,
+        "discount": 0,  
+        "supplierID": "D001",
+        "points": 20,
+        "brand": "长白山"
+    }
+]    
