@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { View, Button, Text } from "@tarojs/components";
-import Taro from '@tarojs/taro'
+import Taro from "@tarojs/taro";
 import {
   AtModal,
   AtModalHeader,
@@ -13,9 +13,11 @@ import { connect } from "react-redux";
 import "taro-ui/dist/style/components/input-number.scss";
 import "taro-ui/dist/style/components/icon.scss";
 import "taro-ui/dist/style/components/modal.scss";
+import "taro-ui/dist/style/components/toast.scss";
 import API_GOODS from "../../api/goodDetail.json";
 
 import { actions as GoodsActions } from "../../modules/goods";
+import { actions as CartActions } from "../../modules/cart";
 
 class details extends Component {
   constructor() {
@@ -28,8 +30,13 @@ class details extends Component {
   }
 
   componentDidMount() {
-    console.log("detail loaded", Taro.getCurrentInstance().router.params.goodsID);
-    this.props.actions.getGoodsDetail({goodsID: Taro.getCurrentInstance().router.params.goodsID})
+    console.log(
+      "detail loaded",
+      Taro.getCurrentInstance().router.params.goodsID
+    );
+    this.props.actions.getGoodsDetail({
+      goodsID: Taro.getCurrentInstance().router.params.goodsID,
+    });
   }
 
   handleChange(value) {
@@ -54,19 +61,37 @@ class details extends Component {
     this.setState({ isOpen: false });
   };
 
-  componentDidShow() {
-    console.log("cart show");
-  }
+  handleSubmit = (good) => {
+    this.props.cartActions.postNewGoods({
+      goodsID: good.goodsID,
+      qty: this.state.value,
+    });
+  };
 
+  componentDidUpdate = (prevProps) => {
+    console.log("updated!", prevProps.cart.postNewGoods);
+    if (!prevProps.cart.postNewGoods && this.props.cart.postNewGoods) {
+      if (this.props.cart.postNewGoods.status === 0) {
+        this.handleClose();
+        Taro.showToast({
+          title: "加入购物车成功",
+          icon: "success",
+          duration: 2000,
+        });
+        this.props.cartActions.updatePostNewGoods(null);
+      }
+    }
+  };
+
+  componentWillUnmount() {
+    this.props.actions.updateGoodsDetail(null);
+  }
+  
   render() {
     const good = this.props.goods.goodsDetail;
     const { isOpen, cart } = this.state;
-    if(!good){
-        return (
-            <View>
-                loading
-            </View>
-        )
+    if (!good) {
+      return <View>loading</View>;
     }
     return (
       <View>
@@ -83,8 +108,8 @@ class details extends Component {
             />
           </AtModalContent>
           <AtModalAction>
-            <Button onClick={this.handleClose}>取消</Button>{" "}
-            <Button onClick={this.handleClose}>确定</Button>
+            <Button onClick={this.handleClose}>取消</Button>
+            <Button onClick={() => this.handleSubmit(good)}>确定</Button>
           </AtModalAction>
         </AtModal>
         <Text>{good.goodsName}</Text>
@@ -94,17 +119,19 @@ class details extends Component {
         <Text>折后价格：{good.discountPrice}</Text>
         <Text>退换货：{good.returnDaysName}</Text>
         <Button onClick={() => this.handleOpen(true)}>加入购物车</Button>
-        <Button onClick={() => this.handleOpen(false)}>李炯股买</Button>
+        <Button onClick={() => this.handleOpen(false)}>立即购买</Button>
       </View>
     );
   }
 }
 const mapStateToProps = (state) => ({
-    goods: state.goods,
-  });
-  
-  const mapDispatchToProps = (dispatch) => ({
-    actions: bindActionCreators(GoodsActions, dispatch),
-  });
-  
+  goods: state.goods,
+  cart: state.cart,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(GoodsActions, dispatch),
+  cartActions: bindActionCreators(CartActions, dispatch),
+});
+
 export default connect(mapStateToProps, mapDispatchToProps)(details);

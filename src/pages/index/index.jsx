@@ -12,7 +12,7 @@ import { actions as UserActions } from "../../modules/user";
 
 import "./index.css";
 
-axios.defaults.baseURL = "https://f637-2409-8a1e-6c52-f10-d4fa-570e-ba2c-7b75.ngrok.io";
+axios.defaults.baseURL = "https://a2fd-2409-8a1e-6c52-f10-4531-a0c8-94a2-8be4.ngrok.io";
 //写入信息
 
 axios.interceptors.request.use(function (config) {

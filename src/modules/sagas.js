@@ -1,10 +1,14 @@
 import { all, fork } from 'redux-saga/effects'
 import userSaga from './user/sagas'
 import goodsSaga from './goods/sagas'
+import cartSaga from './cart/sagas'
+import orderSaga from './order/sagas'
 
 const sagas = [
     userSaga,
-    goodsSaga
+    goodsSaga,
+    cartSaga,
+    orderSaga
 ]
 
 function* rootSaga(){

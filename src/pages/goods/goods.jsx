@@ -55,6 +55,13 @@ class goods extends Component {
     render(){
 
       const {topGoods} = this.props.goods;
+      if(topGoods === "err"){
+        return(
+          <View>
+           没登陆
+          </View>
+        )
+      }
         return(
             
             <View className='components-page'>
