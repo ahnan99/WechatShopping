@@ -1,5 +1,5 @@
 export default {
-  pages: ["pages/index/index", "pages/cart/cart", "pages/goods/goods", "pages/goods/details"],
+  pages: ["pages/index/index", "pages/cart/cart", "pages/goods/goods", "pages/goods/details", "pages/order/preOrder"],
   window: {
     backgroundTextStyle: "light",
     navigationBarBackgroundColor: "#fff",

@@ -4,6 +4,8 @@ const POST_PRE_ORDER_GOODS = "post_pre_order_goods";
 const UPDATE_POST_PRE_ORDER_GOODS = "update_post_pre_order_goods";
 const GET_PRE_ORDER = "get_pre_order";
 const UPDATE_PRE_ORDER = "update_pre_order";
+const GET_PRE_ORDER_DETAIL = "get_pre_order_detail";
+const UPDATE_PRE_ORDER_DETAIL = "update_pre_order_detail";
 
 export const types = {
   POST_PRE_ORDER_CART,
@@ -12,6 +14,8 @@ export const types = {
   UPDATE_POST_PRE_ORDER_GOODS,
   GET_PRE_ORDER,
   UPDATE_PRE_ORDER,
+  GET_PRE_ORDER_DETAIL,
+  UPDATE_PRE_ORDER_DETAIL
 };
 
 const postPreOrderCart = (payload) => ({
@@ -44,6 +48,16 @@ const updatePreOrder = (data) => ({
   data,
 });
 
+const getPreOrderDetail = (payload) => ({
+  type: GET_PRE_ORDER_DETAIL,
+  payload,
+});
+
+const updatePreOrderDetail = (data) => ({
+  type: UPDATE_PRE_ORDER_DETAIL,
+  data,
+});
+
 export const actions = {
   postPreOrderCart,
   updatePostPreOrderCart,
@@ -51,22 +65,19 @@ export const actions = {
   updatePostPreOrderGoods,
   getPreOrder,
   updatePreOrder,
+  getPreOrderDetail,
+  updatePreOrderDetail
 };
 
 const initialState = {
   postPreOrderCart: null,
   postPreOrderGoods: null,
   preOrder: null,
+  preOrderDetail: null
 };
 
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
-    case UPDATE_POST_PRE_ORDER_CART: {
-      return {
-        ...state,
-        topGoods: action.data,
-      };
-    }
     case UPDATE_POST_PRE_ORDER_CART: {
       return {
         ...state,
@@ -83,6 +94,12 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         preOrder: action.data,
+      };
+    }
+    case UPDATE_PRE_ORDER_DETAIL: {
+      return {
+        ...state,
+        preOrderDetail: action.data,
       };
     }
     default: {

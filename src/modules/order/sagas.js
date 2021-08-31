@@ -11,11 +11,15 @@ function* postPreOrderCartWatch() {
 }
 
 function* postPreOrderGoodsWatch() {
-    yield takeLatest(types.POST_REMOVE_GOODS, postPreOrderGoodsWorker)
+    yield takeLatest(types.POST_PRE_ORDER_GOODS, postPreOrderGoodsWorker)
 }
 
 function* getPreOrderWatch() {
-    yield takeLatest(types.POST_EMPTY_CART, getPreOrderWorker)
+    yield takeLatest(types.GET_PRE_ORDER, getPreOrderWorker)
+}
+
+function* getPreOrderDetailWatch() {
+    yield takeLatest(types.GET_PRE_ORDER_DETAIL, getPreOrderDetailWorker)
 }
 
 export function postPreOrderCartEndpoint(data) {
@@ -28,6 +32,12 @@ export function postPreOrderGoodsEndpoint(data) {
 
 export function getPreOrderEndpoint(data) {
     return axios.get('/orders/getPreOrderInfo', {
+        params: data
+    })
+}
+
+export function getPreOrderDetailEndpoint(data) {
+    return axios.get('/orders/getPreOrderDetail', {
         params: data
     })
 }
@@ -60,18 +70,27 @@ function* getPreOrderWorker(action) {
     }
 }
 
-
+function* getPreOrderDetailWorker(action) {
+    try {
+        const response = yield call(getPreOrderDetailEndpoint, action.payload)
+        yield put(actions.updatePreOrderDetail(response.data))
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 export const workers = {
     postPreOrderCartWorker,
     postPreOrderGoodsWorker,
-    getPreOrderWorker
+    getPreOrderWorker,
+    getPreOrderDetailWorker
 }
 
 export default function* saga() {
     yield all([
         postPreOrderCartWatch(),
         postPreOrderGoodsWatch(),
-        getPreOrderWatch()
+        getPreOrderWatch(),
+        getPreOrderDetailWatch()
     ])
 }

@@ -18,6 +18,7 @@ import API_GOODS from "../../api/goodDetail.json";
 
 import { actions as GoodsActions } from "../../modules/goods";
 import { actions as CartActions } from "../../modules/cart";
+import { actions as OrderActions } from "../../modules/order";
 
 class details extends Component {
   constructor() {
@@ -62,10 +63,18 @@ class details extends Component {
   };
 
   handleSubmit = (good) => {
-    this.props.cartActions.postNewGoods({
-      goodsID: good.goodsID,
-      qty: this.state.value,
-    });
+    if(this.state.cart){
+      this.props.cartActions.postNewGoods({
+        goodsID: good.goodsID,
+        qty: this.state.value,
+      });
+    }else{
+      this.props.orderActions.postPreOrderGoods({
+        goodsID: good.goodsID,
+        qty: this.state.value,
+      });
+    }
+    
   };
 
   componentDidUpdate = (prevProps) => {
@@ -80,6 +89,19 @@ class details extends Component {
         });
         this.props.cartActions.updatePostNewGoods(null);
       }
+    }
+    if(!prevProps.order.postPreOrderGoods && this.props.order.postPreOrderGoods){
+      if(this.props.order.postPreOrderGoods.status === 0){
+        console.log('结算成功')
+        Taro.navigateTo({url: `/pages/order/preOrder?orderID=${this.props.order.postPreOrderGoods.preOrderID}`})
+      }else{
+        Taro.showToast({
+          title: '生成预订单错误',
+          icon: 'error',
+          duration: 2000
+        })
+      }
+      this.props.orderActions.updatePostPreOrderGoods(null)
     }
   };
 
@@ -127,11 +149,13 @@ class details extends Component {
 const mapStateToProps = (state) => ({
   goods: state.goods,
   cart: state.cart,
+  order: state.order
 });
 
 const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(GoodsActions, dispatch),
   cartActions: bindActionCreators(CartActions, dispatch),
+  orderActions: bindActionCreators(OrderActions, dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(details);
