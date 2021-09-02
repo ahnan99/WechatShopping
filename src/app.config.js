@@ -1,5 +1,10 @@
 export default {
-  pages: ["pages/index/index", "pages/cart/cart", "pages/goods/goods", "pages/goods/details", "pages/order/preOrder"],
+  pages: ["pages/index/index", 
+  "pages/cart/cart", 
+  "pages/goods/goods", 
+  "pages/goods/details", 
+  "pages/order/preOrder", 
+  "pages/order/receiverDetail"],
   window: {
     backgroundTextStyle: "light",
     navigationBarBackgroundColor: "#fff",

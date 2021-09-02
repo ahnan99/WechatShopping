@@ -4,6 +4,10 @@ const CHANGE_APP_ON_LAUNCH = "change_app_on_launch";
 const UPDATE_MEMBERID = "update_member_id";
 const GET_MEMBER = "get_member";
 const UPDATE_MEMBER = "update_member";
+const GET_REFEREE_LIST = "get_referee_list";
+const UPDATE_REFEREE_LIST = "update_referee_list";
+const GET_POINT_LIST = "get_point_list";
+const UPDATE_POINT_LIST = "update_point_list";
 
 export const types = {
   REQUEST_LOGIN,
@@ -12,6 +16,10 @@ export const types = {
   UPDATE_MEMBERID,
   GET_MEMBER,
   UPDATE_MEMBER,
+  GET_REFEREE_LIST,
+  UPDATE_REFEREE_LIST,
+  GET_POINT_LIST,
+  UPDATE_POINT_LIST,
 };
 
 const requestLogin = (payload) => ({
@@ -43,6 +51,27 @@ const changeAppOnLaunch = () => ({
   type: CHANGE_APP_ON_LAUNCH,
 });
 
+
+const getRefereeList = (payload) => ({
+  type: GET_REFEREE_LIST,
+  payload,
+});
+
+const updateRefereeList = (data) => ({
+  type: UPDATE_REFEREE_LIST,
+  data,
+});
+
+const getPointList = (payload) => ({
+  type: GET_POINT_LIST,
+  payload,
+});
+
+const updatePointList = (data) => ({
+  type: UPDATE_POINT_LIST,
+  data,
+});
+
 export const actions = {
   requestLogin,
   updateUserLogin,
@@ -50,6 +79,10 @@ export const actions = {
   updateMemberID,
   updateMember,
   getMember,
+  getRefereeList,
+  updateRefereeList,
+  getPointList,
+  updatePointList,
 };
 
 const initialState = {
@@ -58,6 +91,8 @@ const initialState = {
   appOnLaunch: true,
   memberID: null,
   member: null,
+  refereeList: null,
+  pointList: null,
 };
 
 const reducer = (state = initialState, action = {}) => {
@@ -84,6 +119,18 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         member: action.data,
+      };
+    }
+    case UPDATE_REFEREE_LIST: {
+      return {
+        ...state,
+        refereeList: action.data,
+      };
+    }
+    case UPDATE_POINT_LIST: {
+      return {
+        ...state,
+        pointList: action.data,
       };
     }
     default: {

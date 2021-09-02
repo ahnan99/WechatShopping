@@ -8,6 +8,8 @@ const POST_REMOVE_GOODS = "post_remove_goods";
 const UPDATE_POST_REMOVE_GOODS = "update_post_remove_goods";
 const POST_EMPTY_CART = "post_empty_cart";
 const UPDATE_POST_EMPTY_CART = "update_post_empty_cart";
+const POST_CAL_TOTAL = 'post_cal_total'
+const UPDATE_POST_CAL_TOTAL = 'update_post_cal_total'
 
 export const types = {
     POST_NEW_GOODS,
@@ -19,7 +21,9 @@ export const types = {
     POST_REMOVE_GOODS,
     UPDATE_POST_REMOVE_GOODS,
     POST_EMPTY_CART,
-    UPDATE_POST_EMPTY_CART
+    UPDATE_POST_EMPTY_CART,
+    POST_CAL_TOTAL, 
+    UPDATE_POST_CAL_TOTAL
 };
 
 const postNewGoods = (payload) => ({
@@ -71,6 +75,17 @@ const getCart = (payload) => ({
     type: UPDATE_POST_EMPTY_CART,
     data,
   });
+
+  const postCalTotal = (payload) => ({
+    type: POST_CAL_TOTAL,
+    payload,
+  });
+  
+  const updatePostCalTotal = (data) => ({
+    type: UPDATE_POST_CAL_TOTAL,
+    data,
+  });
+
 export const actions = {
     postNewGoods,
     updatePostNewGoods,
@@ -81,7 +96,9 @@ export const actions = {
     postRemoveGoods,
     updatePostRemoveGoods,
     postEmptyCart,
-    updatePostEmptyCart
+    updatePostEmptyCart,
+    postCalTotal,
+    updatePostCalTotal
 };
 
 const initialState = {
@@ -89,7 +106,8 @@ const initialState = {
     postNewGoods: null,
     postUpdateQty: null,
     postRemoveGoods: null,
-    postEmptyCart: null
+    postEmptyCart: null,
+    postCalTotal: null
 };
 
 const reducer = (state = initialState, action = {}) => {
@@ -122,6 +140,12 @@ const reducer = (state = initialState, action = {}) => {
         return {
           ...state,
           postUpdateQty: action.data
+        };
+      }
+      case UPDATE_POST_CAL_TOTAL: {
+        return {
+          ...state,
+          postCalTotal: action.data
         };
       }
       case UPDATE_CART: {

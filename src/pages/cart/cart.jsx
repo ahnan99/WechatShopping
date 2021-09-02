@@ -129,7 +129,8 @@ class cart extends Component {
   }
 
   onCheckBoxChange = (e) => {
-    this.setState({selected: e.detail.value})
+    this.setState({selected: e.detail.value},()=>{this.props.actions.postCalTotal({selList: this.state.selected})})
+
   }
 
   onClickEmptyCart = () => {
@@ -172,6 +173,9 @@ class cart extends Component {
           </View>
         ))}
         </CheckboxGroup>
+        <View>
+          <Text>总计：{this.props.cart.postCalTotal?this.props.cart.postCalTotal.total:0}</Text>
+          </View>
         <View>
           <Button formType='submit'>结算</Button>
         </View>

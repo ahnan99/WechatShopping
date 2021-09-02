@@ -24,6 +24,10 @@ function* postUpdateQtyWatch() {
     yield takeLatest(types.POST_UPDATE_QTY, postUpdateQtyWorker)
 }
 
+function* postCalTotalWatch() {
+    yield takeLatest(types.POST_CAL_TOTAL, postCalTotalWorker)
+}
+
 export function postNewGoodsEndpoint(data) {
     return axios.post('/orders/addCartInfo', data)
 }
@@ -42,6 +46,10 @@ export function postUpdateQtyEndpoint(data) {
 
 export function postEmptyCartEndpoint() {
     return axios.post('/orders/emptyCartInfo')
+}
+
+export function postCalTotalEndpoint(data) {
+    return axios.post('/orders/calTotalPriceByCart', data)
 }
 
 function* getCartWorker() {
@@ -91,6 +99,14 @@ function* postEmptyCartWorker(action) {
     }
 }
 
+function* postCalTotalWorker(action) {
+    try {
+        const response = yield call(postCalTotalEndpoint, action.payload)
+        yield put(actions.updatePostCalTotal(response.data))
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 export const workers = {
@@ -98,7 +114,8 @@ export const workers = {
     postNewGoodsWorker,
     postRemoveGoodsWorker,
     postUpdateQtyWorker,
-    postEmptyCartWorker
+    postEmptyCartWorker,
+    postCalTotalWorker
 }
 
 export default function* saga() {
@@ -107,6 +124,7 @@ export default function* saga() {
         postNewGoodsWatch(),
         postRemoveGoodsWatch(),
         postEmptyCartWatch(),
-        postUpdateQtyWatch()
+        postUpdateQtyWatch(),
+        postCalTotalWatch()
     ])
 }
