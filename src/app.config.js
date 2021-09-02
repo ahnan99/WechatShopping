@@ -4,7 +4,8 @@ export default {
   "pages/goods/goods", 
   "pages/goods/details", 
   "pages/order/preOrder", 
-  "pages/order/receiverDetail"],
+  "pages/order/receiverDetail",
+  "pages/order/orderList"],
   window: {
     backgroundTextStyle: "light",
     navigationBarBackgroundColor: "#fff",

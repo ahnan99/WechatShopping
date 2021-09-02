@@ -42,6 +42,11 @@ function* postSelAddressWatch() {
     yield takeLatest(types.POST_SEL_ADDRESS, postSelAddressWorker)
 }
 
+function* getOrderListWatch() {
+    yield takeLatest(types.GET_ORDER_LIST, getOrderListWorker)
+}
+
+
 export function postPreOrderCartEndpoint(data) {
     return axios.post('/orders/genPreOrderByCart', data)
 }
@@ -82,6 +87,9 @@ export function postSubmitPreOrderEndpoint(data) {
     return axios.post('/orders/submitPreOrder', data)
 }
 
+export function getOrderListEndpoint() {
+    return axios.get('/orders/getOrderList')
+}
 
 function* postPreOrderCartWorker(action) {
     try {
@@ -166,6 +174,14 @@ function* postSelAddressWorker(action) {
     }
 }
 
+function* getOrderListWorker() {
+    try {
+        const response = yield call(getOrderListEndpoint)
+        yield put(actions.updateOrderList(response.data))
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 export const workers = {
     postPreOrderCartWorker,
@@ -176,7 +192,8 @@ export const workers = {
     postDelAddressWorker,
     postAddressWorker,
     getAddressListWorker,
-    postSubmitPreOrderWorker
+    postSubmitPreOrderWorker,
+    getOrderListWorker
 }
 
 export default function* saga() {
@@ -189,6 +206,7 @@ export default function* saga() {
         postDelAddressWatch(),
         postAddressWatch(),
         postSelAddressWatch(),
-        postSubmitPreOrderWatch()
+        postSubmitPreOrderWatch(),
+        getOrderListWatch()
     ])
 }

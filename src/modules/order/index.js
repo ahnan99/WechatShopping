@@ -16,6 +16,8 @@ const POST_SEL_ADDRESS = "del_address"
 const UPDATE_POST_SEL_ADDRESS = "update_post_sel_address"
 const POST_SUBMIT_PRE_ORDER = "post_submit_pre_order"
 const UPDATE_POST_SUBMIT_PRE_ORDER = "update_post_submit_pre_order"
+const GET_ORDER_LIST = "get_order_list"
+const UPDATE_ORDER_LIST = "update_order_list"
 
 
 export const types = {
@@ -36,7 +38,9 @@ export const types = {
   UPDATE_POST_SEL_ADDRESS,
   POST_SEL_ADDRESS,
   POST_SUBMIT_PRE_ORDER,
-  UPDATE_POST_SUBMIT_PRE_ORDER
+  UPDATE_POST_SUBMIT_PRE_ORDER,
+  GET_ORDER_LIST,
+  UPDATE_ORDER_LIST
 };
 
 const postPreOrderCart = (payload) => ({
@@ -130,6 +134,17 @@ const updatePostSubmitPreOrder = (data) => ({
   data,
 });
 
+const getOrderList = (payload) => ({
+  type: GET_ORDER_LIST,
+  payload,
+});
+
+const updateOrderList = (data) => ({
+  type: UPDATE_ORDER_LIST,
+  data,
+});
+
+
 export const actions = {
   postPreOrderCart,
   updatePostPreOrderCart,
@@ -148,7 +163,9 @@ export const actions = {
   postSelAddress,
   updatePostSelAddress,
   postSubmitPreOrder,
-  updatePostSubmitPreOrder
+  updatePostSubmitPreOrder,
+  getOrderList,
+  updateOrderList
 };
 
 const initialState = {
@@ -160,7 +177,8 @@ const initialState = {
   postAddress: null,
   postDelAddress: null,
   postSelAddress: null,
-  postSubmitPreOrder: null
+  postSubmitPreOrder: null,
+  orderList: null
 };
 
 const reducer = (state = initialState, action = {}) => {
@@ -217,6 +235,12 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         postSubmitPreOrder: action.data,
+      };
+    }
+    case UPDATE_ORDER_LIST: {
+      return {
+        ...state,
+        orderList: action.data,
       };
     }
     default: {
