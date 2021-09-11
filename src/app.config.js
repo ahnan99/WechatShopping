@@ -5,7 +5,8 @@ export default {
   "pages/goods/details", 
   "pages/order/preOrder", 
   "pages/order/receiverDetail",
-  "pages/order/orderList"],
+  "pages/order/orderList",
+  "pages/account/myAccount"],
   window: {
     backgroundTextStyle: "light",
     navigationBarBackgroundColor: "#fff",
@@ -33,7 +34,7 @@ export default {
         text: "购物车",
       },
       {
-        pagePath: "pages/cart/cart",
+        pagePath: "pages/account/myAccount",
         iconPath: "./image/user.png",
         selectedIconPath: "./image/user-a.png",
         text: "我的",

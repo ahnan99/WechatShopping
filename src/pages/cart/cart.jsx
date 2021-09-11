@@ -122,6 +122,7 @@ class cart extends Component {
 
   componentDidShow() {
     this.props.actions.getCart();
+    this.props.actions.postCalTotal({selList: this.state.selected})
   }
 
   componentDidHide() {

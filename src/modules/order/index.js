@@ -18,6 +18,20 @@ const POST_SUBMIT_PRE_ORDER = "post_submit_pre_order"
 const UPDATE_POST_SUBMIT_PRE_ORDER = "update_post_submit_pre_order"
 const GET_ORDER_LIST = "get_order_list"
 const UPDATE_ORDER_LIST = "update_order_list"
+const GET_PRE_ORDER_LIST = "get_pre_order_list"
+const UPDATE_PRE_ORDER_LIST = "update_pre_order_list"
+const POST_PRE_ORDER_MEMO = "post_pre_order_memo"
+const UPDATE_POST_PRE_ORDER_MEMO = "update_pre_order_memo"
+const POST_CANCEL_PRE_ORDER = "post_cancel_pre_order"
+const UPDATE_POST_CANCEL_PRE_ORDER = "update_post_cancel_pre_order"
+const POST_CANCEL_ORDER = "post_cancel_order"
+const UPDATE_POST_CANCEL_ORDER = "update_post_cancel_order"
+const POST_GOODS_RECEIPT = "post_goods_receipt"
+const UPDATE_POST_GOODS_RECEIPT = "update_post_goods_receipt"
+const POST_RETURN_REQUIREMENT = "post_return_requirement"
+const UPDATE_POST_RETURN_REQUIREMENT = "update_post_return_requirement"
+const POST_PAY_PRE_OREDER = "post_pay_pre_order"
+const UPDATE_POST_PAY_PRE_ORDER = "update_post_pay_pre_order"
 
 
 export const types = {
@@ -40,7 +54,21 @@ export const types = {
   POST_SUBMIT_PRE_ORDER,
   UPDATE_POST_SUBMIT_PRE_ORDER,
   GET_ORDER_LIST,
-  UPDATE_ORDER_LIST
+  UPDATE_ORDER_LIST,
+  GET_PRE_ORDER_LIST,
+  UPDATE_PRE_ORDER_LIST,
+  POST_PRE_ORDER_MEMO,
+  UPDATE_POST_PRE_ORDER_MEMO,
+  POST_CANCEL_PRE_ORDER,
+  UPDATE_POST_CANCEL_PRE_ORDER,
+  POST_CANCEL_ORDER,
+  UPDATE_POST_CANCEL_ORDER,
+  POST_GOODS_RECEIPT,
+  UPDATE_POST_GOODS_RECEIPT,
+  POST_RETURN_REQUIREMENT,
+  UPDATE_POST_RETURN_REQUIREMENT,
+  POST_PAY_PRE_OREDER,
+  UPDATE_POST_PAY_PRE_ORDER
 };
 
 const postPreOrderCart = (payload) => ({
@@ -144,6 +172,75 @@ const updateOrderList = (data) => ({
   data,
 });
 
+const getPreOrderList = (payload) => ({
+  type: GET_PRE_ORDER_LIST,
+  payload,
+});
+
+const updatePreOrderList = (data) => ({
+  type: UPDATE_PRE_ORDER_LIST,
+  data,
+});
+
+const postPreOrderMemo = (payload) => ({
+  type: POST_PRE_ORDER_MEMO,
+  payload,
+});
+
+const updatePostPreOrderMemo = (data) => ({
+  type: UPDATE_POST_PRE_ORDER_MEMO,
+  data,
+});
+
+const postCancelPreOrder = (payload) => ({
+  type: POST_CANCEL_PRE_ORDER,
+  payload,
+});
+
+const updatePostCancelPreOrder = (data) => ({
+  type: UPDATE_POST_CANCEL_PRE_ORDER,
+  data,
+});
+
+const postGoodsReceipt = (payload) => ({
+  type: POST_GOODS_RECEIPT,
+  payload,
+});
+
+const updatePostGoodsReceipt = (data) => ({
+  type: UPDATE_POST_GOODS_RECEIPT,
+  data,
+});
+
+const postReturnRequirement = (payload) => ({
+  type: POST_RETURN_REQUIREMENT,
+  payload,
+});
+
+const updatePostReturnRequirement = (data) => ({
+  type: UPDATE_POST_RETURN_REQUIREMENT,
+  data,
+});
+
+const postPayPreOrder = (payload) => ({
+  type: POST_PAY_PRE_OREDER,
+  payload,
+});
+
+const updatePostPayPreOrder = (data) => ({
+  type: UPDATE_POST_PAY_PRE_ORDER,
+  data,
+});
+
+const postCancelOrder = (payload) => ({
+  type: POST_CANCEL_ORDER,
+  payload,
+});
+
+const updatePostCancelOrder = (data) => ({
+  type: UPDATE_POST_CANCEL_ORDER,
+  data,
+});
 
 export const actions = {
   postPreOrderCart,
@@ -165,7 +262,21 @@ export const actions = {
   postSubmitPreOrder,
   updatePostSubmitPreOrder,
   getOrderList,
-  updateOrderList
+  updateOrderList,
+  getPreOrderList,
+  updatePreOrderList,
+  postPreOrderMemo,
+  updatePostPreOrderMemo,
+  postCancelPreOrder,
+  updatePostCancelPreOrder,
+  postGoodsReceipt,
+  updatePostGoodsReceipt,
+  postReturnRequirement,
+  updatePostReturnRequirement,
+  postPayPreOrder,
+  updatePostPayPreOrder,
+  postCancelOrder,
+  updatePostCancelOrder
 };
 
 const initialState = {
@@ -178,7 +289,13 @@ const initialState = {
   postDelAddress: null,
   postSelAddress: null,
   postSubmitPreOrder: null,
-  orderList: null
+  orderList: null,
+  preOrderList: null,
+  postPreOrderMemo: null,
+  postCancelPreOrder: null,
+  postCacnelOrder: null,
+  postReturnRequirement: null,
+  postPayPreOrder: null
 };
 
 const reducer = (state = initialState, action = {}) => {
@@ -241,6 +358,48 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         orderList: action.data,
+      };
+    }
+    case UPDATE_PRE_ORDER_LIST: {
+      return {
+        ...state,
+        preOrderList: action.data,
+      };
+    }
+    case UPDATE_POST_PRE_ORDER_MEMO: {
+      return {
+        ...state,
+        postPreOrderMemo: action.data,
+      };
+    }
+    case UPDATE_POST_CANCEL_PRE_ORDER: {
+      return {
+        ...state,
+        postCancelPreOrder: action.data,
+      };
+    }
+    case UPDATE_POST_CANCEL_ORDER: {
+      return {
+        ...state,
+        postCacnelOrder: action.data,
+      };
+    }
+    case UPDATE_POST_GOODS_RECEIPT: {
+      return {
+        ...state,
+        postGoodsReceipt: action.data,
+      };
+    }
+    case UPDATE_POST_PAY_PRE_ORDER: {
+      return {
+        ...state,
+        postPayPreOrder: action.data,
+      };
+    }
+    case UPDATE_POST_RETURN_REQUIREMENT: {
+      return {
+        ...state,
+        postReturnRequirement: action.data,
       };
     }
     default: {
