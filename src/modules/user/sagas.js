@@ -17,7 +17,7 @@ function* getRefereeListWatch() {
 }
 
 function* getPointListWatch() {
-    yield takeLatest(types.GET_MEMBER, getPointListWorker)
+    yield takeLatest(types.GET_POINT_LIST, getPointListWorker)
 }
 
 export function userLoginEndpoint(data) {

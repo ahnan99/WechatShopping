@@ -36,7 +36,7 @@ class preOrder extends Component {
           }
           this.props.actions.updatePostSubmitPreOrder(null)
           Taro.navigateBack()
-          Taro.navigateTo({url: `/pages/order/orderList`})
+          Taro.navigateTo({url: `/pages/order/payment?orderID=${Taro.getCurrentInstance().router.params.orderID}`})
       }
 
       if(!prevProps.order.postPreOrderMemo && this.props.order.postPreOrderMemo){
@@ -45,7 +45,6 @@ class preOrder extends Component {
             ID: Taro.getCurrentInstance().router.params.orderID,
           });
           this.props.actions.updatePostSubmitPreOrder(null)
-          console.log('update successeddedddd')
         }else{
           Taro.showToast({
             title: '更新失败',
