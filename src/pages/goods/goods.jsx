@@ -168,7 +168,7 @@ class goods extends Component {
                 {this.props.goods.goodsKind?.map(kind=>(
                     <AtButton type='secondary' onClick={()=>this.handleKindClick(kind)}>{kind.kindName}</AtButton>
                 ))}
-                <View style={{textAlign:"center"}}><image className="table-icon-tuijian" src="../../image/home/recommend.png"></image> {this.state.text}</View>
+                <View style={{textAlign:"center"}}><image className="table-icon-tuijian" src="../../image/recommend.png"></image> {this.state.text}</View>
                 <View className="goods-container">
                     {topGoods ? topGoods.map(good => (
                         <View className="goods-box" key={good.ID} onClick={() => this.onClickItem(good)}>

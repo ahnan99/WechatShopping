@@ -7,7 +7,11 @@ export default {
         "pages/order/receiverDetail",
         "pages/order/orderList",
         "pages/account/myAccount",
-        "pages/order/payment"],
+        "pages/order/payment",
+        "pages/account/myPointList",
+        "pages/account/myPoint",
+        "pages/account/myProfile",
+        "pages/account/myReferee"],
     window: {
         backgroundTextStyle: "light",
         navigationBarBackgroundColor: "#fff",

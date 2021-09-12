@@ -3,10 +3,11 @@ import { View, Button, Text, Checkbox, CheckboxGroup } from "@tarojs/components"
 import Taro from "@tarojs/taro"
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { AtList, AtListItem, AtTabs, AtTabsPane } from "taro-ui";
+import { AtList, AtListItem, AtTabs, AtTabsPane, AtGrid } from "taro-ui";
 import { actions as UserActions } from "../../modules/user"
 import "taro-ui/dist/style/components/list.scss";
-import "taro-ui/dist/style/components/tabs.scss"
+import "taro-ui/dist/style/components/tabs.scss";
+import "taro-ui/dist/style/components/grid.scss";
 
 class myAccount extends Component {
     constructor() {
@@ -22,70 +23,77 @@ class myAccount extends Component {
         })
     }
 
-    handleClick = () => {
-        Taro.navigateTo({ url: `/pages/order/orderList` })
+    handleClickOrderType = item => {
+        Taro.navigateTo({ url: `/pages/order/orderList?current=${item.index}` })
     }
 
-    componentDidShow() {
-        this.props.actions.getRefereeList()
-        this.props.actions.getPointList()
-        this.props.actions.getMember({memberID: this.props.user.memberID})
+    handleClickMy = item => {
+        Taro.navigateTo({ url: item.url })
     }
+
 
     render() {
-        const tabList = [{ title: '可用积分' }, { title: '锁定积分' }, { title: '使用积分' }]
         return (
             <View>
-                <Button onClick={() => this.handleClick()}>我的订单</Button>
-                <Text>我的积分</Text>
-                <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClickTab.bind(this)}>
-                    <AtTabsPane current={this.state.current} index={0} >
-                        <View style='padding: 15px 10px;background-color: #FAFBFC;text-align: left;' ><View>
-                            <AtList>
-                                {
-                                    this.props.user.pointList?.filter(point => { return point.type === 0 }).map(point => (
-                                        <AtListItem title={`积分：${point.points}  类型：${point.typeName}`} note={`订单号${point.orderID}  获得时间: ${point.regDate}`} />
-                                    ))
-                                }
-                            </AtList>
-                        </View>
-                        </View>
-                    </AtTabsPane>
-                    <AtTabsPane current={this.state.current} index={1} >
-                        <View style='padding: 15px 10px;background-color: #FAFBFC;text-align: left;' ><View>
-                            <AtList>
-                                {
-                                    this.props.user.pointList?.filter(point => { return point.type === 1 }).map(point => (
-                                        <AtListItem title={`积分：${point.points}  类型：${point.typeName}`} note={`订单号${point.orderID}  获得时间: ${point.regDate}`} />
-                                    ))
-                                }
-                            </AtList>
-                        </View>
-                        </View>
-                    </AtTabsPane>
-                    <AtTabsPane current={this.state.current} index={2} >
-                        <View style='padding: 15px 10px;background-color: #FAFBFC;text-align: left;' ><View>
-                            <AtList>
-                                {
-                                    this.props.user.pointList?.filter(point => { return point.type === 2 }).map(point => (
-                                        <AtListItem title={`积分：${point.points}  类型：${point.typeName}`} note={`订单号${point.orderID}  获得时间: ${point.regDate}`} />
-                                    ))
-                                }
-                            </AtList>
-                        </View>
-                        </View>
-                    </AtTabsPane>
-                </AtTabs>
-                <Text>我推荐的人</Text>
-                <AtList>
-                    {
-                        this.props.user.refereeList?.map(referee => (
-                            <AtListItem title={`昵称：${referee.nickName}  注册时间：${referee.regDate}`} />
-                        ))
-                    }
-                </AtList>
-                <Text>个人信息</Text>
-                    <Text>手机：{this.props.user.member?.mobile}</Text>
+                <Text>我的订单</Text>
+                <AtGrid onClick={index => this.handleClickOrderType(index)} data={
+                    [
+                        {
+                            image: 'https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png',
+                            value: '全部订单',
+                            index: 0
+                        },
+                        {
+                            image: 'https://img20.360buyimg.com/jdphoto/s72x72_jfs/t15151/308/1012305375/2300/536ee6ef/5a411466N040a074b.png',
+                            value: '待付款',
+                            index: 0
+                        },
+                        {
+                            image: 'https://img10.360buyimg.com/jdphoto/s72x72_jfs/t5872/209/5240187906/2872/8fa98cd/595c3b2aN4155b931.png',
+                            value: '待发货',
+                            index: 1
+                        },
+                        {
+                            image: 'https://img12.360buyimg.com/jdphoto/s72x72_jfs/t10660/330/203667368/1672/801735d7/59c85643N31e68303.png',
+                            value: '待收货',
+                            index: 2
+                        },
+                        {
+                            image: 'https://img14.360buyimg.com/jdphoto/s72x72_jfs/t17251/336/1311038817/3177/72595a07/5ac44618Na1db7b09.png',
+                            value: '退款了',
+                            index: 3
+                        },
+                        {
+                            image: 'https://img30.360buyimg.com/jdphoto/s72x72_jfs/t5770/97/5184449507/2423/294d5f95/595c3b4dNbc6bc95d.png',
+                            value: '退货了',
+                            index: 4
+                        }
+                    ]
+                } />
+
+                <Text>我的账户</Text>
+                <AtGrid mode='rect' onClick={() => this.handleClickMy()} data={
+                    [
+                        {
+                            image: 'https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png',
+                            value: '我的积分',
+                            url: '/pages/account/myPoint',
+                            
+
+                        },
+                        {
+                            image: 'https://img20.360buyimg.com/jdphoto/s72x72_jfs/t15151/308/1012305375/2300/536ee6ef/5a411466N040a074b.png',
+                            value: '我推荐的人',
+                            url: '/pages/account/myProfile'
+                        },
+                        {
+                            image: 'https://img10.360buyimg.com/jdphoto/s72x72_jfs/t5872/209/5240187906/2872/8fa98cd/595c3b2aN4155b931.png',
+                            value: '我的信息',
+                            url: '/pages/account/myProfile'
+                        }
+
+                    ]
+                } />
             </View>
         )
     }

@@ -13,7 +13,7 @@ class orderList extends Component {
     constructor() {
         super()
         this.state = {
-            current: 0,
+            current: Taro.getCurrentInstance().router.params.current ? Number(Taro.getCurrentInstance().router.params.current) : 0,
         }
     }
 
@@ -25,6 +25,7 @@ class orderList extends Component {
     componentDidShow() {
         this.props.actions.getOrderList()
         this.props.actions.getPreOrderList()
+        console.log(this.state.current)
     }
 
     componentWillHide() {
@@ -37,7 +38,7 @@ class orderList extends Component {
     }
 
     render() {
-        const tabList = [{ title: '待付款' }, { title: '待发货' }, { title: '待收货' }, { title: '待退货' }, { title: '退货了' }]
+        const tabList = [{ title: '待付款' }, { title: '待发货' }, { title: '待收货' }, { title: '退款了' }, { title: '退货了' }]
         if (!this.props.order.orderList || !this.props.order.preOrderList) {
             return <View>loading</View>;
         }
