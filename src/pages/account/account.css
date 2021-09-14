@@ -1,0 +1,120 @@
+.sub-title {
+    margin: 20rpx;
+    vertical-align: middle;
+    color: #FF8C00;
+}
+
+.goods-info-fx {
+    width: 99%;
+    background-color: #fff;
+    overflow: hidden;
+    margin-bottom: 24rpx;
+    border-radius: 5px;
+    border: 1px solid #D1D1D1;
+    padding-bottom: 10rpx;
+  }
+  
+  .goods-info-fx .item {
+    /* height: 50rpx; */
+    right: 130rpx;
+    top: 100rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 24rpx;
+    background: #fff;
+    z-index: 20;
+  }
+  
+  .goods-info-fx .left {
+    margin-right: 10px;
+  }
+  
+  .goods-info-fx .icon-title{
+    font-size: 30rpx;
+    color: #333;
+    margin-left: 24rpx;
+    padding: 10rpx 20rpx;
+  }
+  
+  .goods-info-fx .item image {
+    width: 50rpx;
+    height: 50rpx;
+  }
+  
+  .goods-info-fx .item button {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    z-index: 99;
+  }
+  
+  .goods-info .goods-title {
+    box-sizing: border-box;
+    padding: 0 30rpx;
+    font-size: 32rpx;
+    line-height: 1.4;
+    color: #000;
+    /* padding-bottom: 26rpx; */
+  }
+  
+  .goods-info .goods-share {
+    box-sizing: border-box;
+    padding: 0 30rpx;
+    font-size: 25rpx;
+    line-height: 1.4;
+    color: #CC0000;
+    padding-top: 26rpx;
+  }
+  
+  .goods-profile {
+    display: flex;
+    align-items: center;
+  }
+  
+  .goods-profile .p {
+    color: #e64340;
+    font-size: 20pt;
+    margin-left: 30rpx;
+  }
+  
+  .goods-profile .p text {
+    font-size: 12pt;
+  }
+  
+  .goods-profile .r {
+    color: #ccc;
+    font-size: 10pt;
+    margin-left: 30rpx;
+  }
+  
+  .goods-box {
+    width: 339rpx;
+    /* height: 472rpx; */
+    background-color: #fff;
+    overflow: hidden;
+    margin-bottom: 24rpx;
+    border-radius: 5px;
+    border: 1px solid #D1D1D1;
+    padding-bottom: 10rpx;
+  }
+  
+  .goods-box .img-box {
+    width: 339rpx;
+    height: 339rpx;
+    overflow: hidden;
+  }
+  
+  .account-image {
+    width: 50rpx;
+    max-height: 50rpx;
+  }
+  
+  .goods-box .goods-title {
+    width: 280rpx;
+    font-size: 24rpx;
+    color: #333;
+    margin-left: 24rpx;
+  }

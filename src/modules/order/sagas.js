@@ -51,6 +51,10 @@ function* getOrderListWatch() {
     yield takeLatest(types.GET_ORDER_LIST, getOrderListWorker)
 }
 
+function* getOrderInfoWatch() {
+    yield takeLatest(types.GET_ORDER_INFO, getOrderInfoWorker)
+}
+
 function* getPreOrderListWatch() {
     yield takeLatest(types.GET_PRE_ORDER_LIST, getPreOrderListWorker)
 }
@@ -67,12 +71,28 @@ function* postCancelOrderWatch() {
     yield takeLatest(types.POST_CANCEL_ORDER, postCancelOrderWorker)
 }
 
+function* postRevertCancelOrderWatch() {
+    yield takeLatest(types.POST_REVERT_CANCEL_ORDER, postRevertCancelOrderWorker)
+}
+
 function* postReturnRequirementWatch() {
     yield takeLatest(types.POST_RETURN_REQUIREMENT, postReturnRequirementWorker)
 }
 
+function* postRevertReturnRequirementWatch() {
+    yield takeLatest(types.POST_REVERT_RETURN_REQUIREMENT, postRevertReturnRequirementWorker)
+}
+
 function* postPayPreOrderWatch() {
     yield takeLatest(types.POST_PAY_PRE_OREDER, postPayPreOrderWorker)
+}
+
+function* postReturnDeliveryWatch() {
+    yield takeLatest(types.POST_RETURN_DELIVERY, postReturnDeliveryWorker)
+}
+
+function* postOrderCloseWatch() {
+    yield takeLatest(types.POST_ORDER_CLOSE, postOrderCloseWorker)
 }
 
 export function postPreOrderCartEndpoint(data) {
@@ -95,6 +115,12 @@ export function getPreOrderEndpoint(data) {
 
 export function getPreOrderDetailEndpoint(data) {
     return axios.get('/orders/getPreOrderDetail', {
+        params: data
+    })
+}
+
+export function getOrderInfoEndpoint(data) {
+    return axios.get('/orders/getOrderInfo', {
         params: data
     })
 }
@@ -139,12 +165,28 @@ export function postCancelOrderEndpoint(data) {
     return axios.post('/orders/orderCancelAskfor', data)
 }
 
+export function postRevertCancelOrderEndpoint(data) {
+    return axios.post('/orders/orderCancelAskforCancel', data)
+}
+
 export function postReturnRequirementEndpoint(data) {
     return axios.post('/orders/orderReturnAskfor', data)
 }
 
+export function postRevertReturnRequirementEndpoint(data) {
+    return axios.post('/orders/orderReturnAskforCancel', data)
+}
+
 export function postPayPreOrderEndpoint(data) {
     return axios.post('/orders/pay4PreOrder', data)
+}
+
+export function postReturnDeliveryEndpoint(data) {
+    return axios.post('/orders/orderReturnDelivery', data)
+}
+
+export function postOrderCloseEndpoint(data) {
+    return axios.post('/orders/orderClose', data)
 }
 
 function* postPreOrderCartWorker(action) {
@@ -178,6 +220,15 @@ function* getPreOrderWorker(action) {
     try {
         const response = yield call(getPreOrderEndpoint, action.payload)
         yield put(actions.updatePreOrder(response.data))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+function* getOrderInfoWorker(action) {
+    try {
+        const response = yield call(getOrderInfoEndpoint, action.payload)
+        yield put(actions.updateOrderInfo(response.data))
     } catch (error) {
         console.log(error)
     }
@@ -275,6 +326,15 @@ function* postCancelOrderWorker(action) {
     }
 }
 
+function* postRevertCancelOrderWorker(action) {
+    try {
+        const response = yield call(postRevertCancelOrderEndpoint, action.payload)
+        yield put(actions.updatePostRevertCancelOrder(response.data))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 function* postCancelPreOrderWorker(action) {
     try {
         const response = yield call(postCancelPreOrderEndpoint, action.payload)
@@ -293,10 +353,37 @@ function* postReturnRequirementWorker(action) {
     }
 }
 
+function* postRevertReturnRequirementWorker(action) {
+    try {
+        const response = yield call(postRevertReturnRequirementEndpoint, action.payload)
+        yield put(actions.updatePostRevertReturnRequirement(response.data))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 function* postPayPreOrderWorker(action) {
     try {
         const response = yield call(postPayPreOrderEndpoint, action.payload)
         yield put(actions.updatePostPayPreOrder(response.data))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+function* postReturnDeliveryWorker(action) {
+    try {
+        const response = yield call(postReturnDeliveryEndpoint, action.payload)
+        yield put(actions.updatePostReturnDelivery(response.data))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+function* postOrderCloseWorker(action) {
+    try {
+        const response = yield call(postOrderCloseEndpoint, action.payload)
+        yield put(actions.updatePostOrderClose(response.data))
     } catch (error) {
         console.log(error)
     }
@@ -318,7 +405,12 @@ export const workers = {
     postGoodsReceiptWorker,
     postCancelOrderWorker,
     postReturnRequirementWorker,
-    postPayPreOrderWorker
+    postPayPreOrderWorker,
+    getOrderInfoWorker,
+    postRevertCancelOrderWorker,
+    postRevertReturnRequirementWorker,
+    postOrderCloseWorker,
+    postReturnDeliveryWorker
 }
 
 export default function* saga() {
@@ -340,5 +432,10 @@ export default function* saga() {
         postCancelOrderWatch(),
         postReturnRequirementWatch(),
         postPayPreOrderWatch(),
+        getOrderInfoWatch(),
+        postRevertCancelOrderWatch(),
+        postRevertReturnRequirementWatch(),
+        postReturnDeliveryWatch(),
+        postOrderCloseWatch()
     ])
 }

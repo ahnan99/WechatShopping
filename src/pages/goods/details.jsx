@@ -7,7 +7,7 @@ import {
     AtModalContent,
     AtModalAction,
     AtInputNumber,
-    AtButton
+    AtButton, AtActivityIndicator
 } from "taro-ui";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -24,6 +24,8 @@ import { actions as CartActions } from "../../modules/cart";
 import { actions as OrderActions } from "../../modules/order";
 import axios from "taro-axios";
 import "./details.css";
+import "taro-ui/dist/style/components/activity-indicator.scss";
+import 'taro-ui/dist/style/components/loading.scss';
 
 class details extends Component {
     constructor() {
@@ -118,7 +120,7 @@ class details extends Component {
         const good = this.props.goods.goodsDetail;
         const { isOpen, cart } = this.state;
         if (!good) {
-            return <View>loading</View>;
+            return <View><AtActivityIndicator size={64}></AtActivityIndicator></View>;
         }
         return (
             <View>

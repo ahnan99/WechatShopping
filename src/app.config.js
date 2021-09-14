@@ -4,6 +4,7 @@ export default {
         "pages/cart/cart",
         "pages/goods/details",
         "pages/order/preOrder",
+        "pages/order/order",
         "pages/order/receiverDetail",
         "pages/order/orderList",
         "pages/account/myAccount",

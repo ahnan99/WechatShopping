@@ -1,12 +1,19 @@
-  
-  .cart-title {
-    width: 450rpx;
-    font-size: 38rpx;
-    color: #e64340;
+.order-title {
+    font-size: 30rpx;
+    color: #999;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    padding: 10rpx 20rpx 20rpx 30rpx;
+    padding: 60rpx 0 0 0;
+  }
+
+  .pay-title {
+    font-size: 30rpx;
+    color: #999;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 40rpx;
   }
 
 .tr {
@@ -112,12 +119,12 @@
   }
   
   .goods-info .text-box {
-    width: 440rpx;
+    width: 300rpx;
     position: relative;
   }
   
   .goods-info .text-box .goods-title {
-    width: 450rpx;
+    width: 300rpx;
     font-size: 28rpx;
     color: #000;
     text-overflow: ellipsis;

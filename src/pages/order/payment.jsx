@@ -2,14 +2,18 @@ import React, { Component } from 'react'
 import Taro from '@tarojs/taro'
 import { connect } from "react-redux";
 import { View, Button, Text, Image } from "@tarojs/components";
-import { AtSearchBar, AtDrawer, AtButton } from 'taro-ui'
+import { AtSearchBar, AtDrawer, AtButton, AtActivityIndicator } from 'taro-ui'
 import { actions as OrderActions } from "../../modules/order";
 import { bindActionCreators } from "redux";
+import "taro-ui/dist/style/components/activity-indicator.scss";
+import 'taro-ui/dist/style/components/loading.scss';
+import "./order.css";
 
 class payment extends Component {
 
     componentDidMount() {
         console.log(Taro.getCurrentInstance().router.params.orderID)
+        this.props.actions.getPreOrder({ ID: Taro.getCurrentInstance().router.params.orderID })
     }
 
     handlePay = () => {
@@ -30,26 +34,37 @@ class payment extends Component {
                     title: '付款成功',
                     icon: 'success',
                     duration: 2000
-                  })
-                  Taro.navigateTo({url: `/pages/order/orderList`})
-            }else{
+                })
+                Taro.navigateTo({ url: `/pages/order/orderList` })
+            } else {
                 Taro.showToast({
                     title: '付款失败',
                     icon: 'error',
                     duration: 2000
-                  })
+                })
             }
             this.props.actions.updatePostPayPreOrder(null)
         }
     }
 
     render() {
+        if (!this.props.order.preOrder) {
+            return (<View><AtActivityIndicator size={64}></AtActivityIndicator></View>)
+        }
         return (
             <View>
-                <Text>金额：{this.props.order.preOrder.amount}</Text>
-                <AtButton onClick={() => this.handlePay()}>付款</AtButton>
+                <View className="pay-title">
+                    <Text>支付金额：{this.props.order.preOrder?.amount}</Text>
+                </View>
+                <View className="pay-title">
+                    <Text>支付类型：{this.props.order.preOrder?.amount}</Text>
+                </View>
+                
+                <View className='at-row at-row__justify--around'>
+                    <View className='at-col at-col-4'><AtButton circle size="small" type='primary' onClick={() => this.handlePay()}>去付款</AtButton></View>
+                </View>
             </View>
-        )
+    )
     }
 }
 

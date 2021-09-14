@@ -1,13 +1,17 @@
 import React, { Component } from "react";
-import { View, Button, Text } from "@tarojs/components";
+import { View, Button, Text, Image } from "@tarojs/components";
 import Taro from "@tarojs/taro";
-import { AtList, AtListItem, AtTabs, AtTabsPane } from "taro-ui";
+import { AtList, AtListItem, AtTabs, AtTabsPane, AtActivityIndicator } from "taro-ui";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import "taro-ui/dist/style/components/icon.scss";
 import "taro-ui/dist/style/components/list.scss";
 import "taro-ui/dist/style/components/tabs.scss"
 import { actions as OrderActions } from "../../modules/order";
+import "./order.css";
+import axios from "taro-axios";
+import "taro-ui/dist/style/components/activity-indicator.scss";
+import 'taro-ui/dist/style/components/loading.scss';
 
 class orderList extends Component {
     constructor() {
@@ -34,13 +38,17 @@ class orderList extends Component {
     }
 
     handleOnClick = item => {
-        Taro.navigateTo({ url: `/pages/order/preOrder?orderID=${item.ID}` })
+        Taro.navigateTo({url: `/pages/order/payment?orderID=${item.ID}`})
+    }
+
+    handleOnClickOrder = order => {
+        Taro.navigateTo({ url: `/pages/order/order?orderID=${order.ID}` })
     }
 
     render() {
-        const tabList = [{ title: '待付款' }, { title: '待发货' }, { title: '待收货' }, { title: '退款了' }, { title: '退货了' }]
+        const tabList = [{ title: '待付款' }, { title: '待发货' }, { title: '待收货' }, { title: '退款退货' }, { title: '全部' }]
         if (!this.props.order.orderList || !this.props.order.preOrderList) {
-            return <View>loading</View>;
+            return <View><AtActivityIndicator size={64}></AtActivityIndicator></View>;
         }
         return (
             <View>
@@ -50,7 +58,12 @@ class orderList extends Component {
                             <AtList>
                                 {
                                     this.props.order.preOrderList.map(order => (
-                                        <AtListItem onClick={() => this.handleOnClick(order)} key={order.ID} title={`预订单：${order.ID} 状态：${order.statusName}`} note={`下单时间: ${order.regDate}`} arrow='right' />
+                                        <AtListItem onClick={() => this.handleOnClick(order)} key={order.ID} 
+                                            title={`#${order.ID}   X ${order.qty}  金额:${order.amount}`} 
+                                            note={`下单:${order.regDate}`} 
+                                            extraText={`${order.statusName}`} 
+                                            thumb='http://img12.360buyimg.com/jdphoto/s72x72_jfs/t10660/330/203667368/1672/801735d7/59c85643N31e68303.png'
+                                            arrow='right' />
                                     ))
                                 }
                             </AtList>
@@ -62,7 +75,22 @@ class orderList extends Component {
                             <AtList>
                                 {
                                     this.props.order.orderList.filter(order => { return order.status === 0 }).map(order => (
-                                        <AtListItem key={order.ID} title={`订单：${order.orderID}`} note={`下单时间: ${order.regDate}`} arrow='right' />
+                                        <View className="goodsList" key={order.ID}  onClick={()=>this.handleOnClickOrder(order)}>
+                                            <View className="a-gooods">
+                                                <View className="a-goods-conts">
+                                                    <View className="goods-info">
+                                                        <View className="img-box">
+                                                            <image mode="aspectFill" src={axios.defaults.baseURL + order.filename} className="img" />
+                                                        </View>
+                                                        <View className="text-box">
+                                                            <View className="goods-title">订单号:{order.orderID}</View>
+                                                            <View className="goods-title">{order.goodsName}</View>
+                                                            <View className="goods-price">X&nbsp;{order.qty}&nbsp;&nbsp;&nbsp;总价:¥ {order.price}</View>
+                                                        </View>
+                                                    </View>
+                                                </View>
+                                            </View>
+                                        </View>
                                     ))
                                 }
                             </AtList>
@@ -75,7 +103,22 @@ class orderList extends Component {
                             <AtList>
                                 {
                                     this.props.order.orderList.filter(order => { return order.status === 1 }).map(order => (
-                                        <AtListItem key={order.ID} title={`订单：${order.orderID}`} note={`下单时间: ${order.regDate}`} arrow='right' />
+                                        <View className="goodsList" key={order.ID}  onClick={()=>this.handleOnClickOrder(order)}>
+                                            <View className="a-gooods">
+                                                <View className="a-goods-conts">
+                                                    <View className="goods-info">
+                                                        <View className="img-box">
+                                                            <image mode="aspectFill" src={axios.defaults.baseURL + order.filename} className="img" />
+                                                        </View>
+                                                        <View className="text-box">
+                                                            <View className="goods-title">订单号:{order.orderID}</View>
+                                                            <View className="goods-title">{order.goodsName}</View>
+                                                            <View className="goods-price">X&nbsp;{order.qty}&nbsp;&nbsp;&nbsp;总价:¥ {order.price}</View>
+                                                        </View>
+                                                    </View>
+                                                </View>
+                                            </View>
+                                        </View>
                                     ))
                                 }
                             </AtList>
@@ -86,8 +129,23 @@ class orderList extends Component {
                         <View style='padding: 15px 10px;background-color: #FAFBFC;text-align: left;' ><View>
                             <AtList>
                                 {
-                                    this.props.order.orderList.filter(order => { return order.status === 2 }).map(order => (
-                                        <AtListItem key={order.ID} title={`订单：${order.orderID}`} note={`下单时间: ${order.regDate}`} arrow='right' />
+                                    this.props.order.orderList.filter(order => { return order.status >= 3 && order.status <= 8}).map(order => (
+                                        <View className="goodsList" key={order.ID}  onClick={()=>this.handleOnClickOrder(order)}>
+                                            <View className="a-gooods">
+                                                <View className="a-goods-conts">
+                                                    <View className="goods-info">
+                                                        <View className="img-box">
+                                                            <image mode="aspectFill" src={axios.defaults.baseURL + order.filename} className="img" />
+                                                        </View>
+                                                        <View className="text-box">
+                                                            <View className="goods-title">订单号:{order.orderID}</View>
+                                                            <View className="goods-title">{order.goodsName}</View>
+                                                            <View className="goods-price">X&nbsp;{order.qty}&nbsp;&nbsp;&nbsp;总价:¥ {order.price}</View>
+                                                        </View>
+                                                    </View>
+                                                </View>
+                                            </View>
+                                        </View>
                                     ))
                                 }
                             </AtList>
@@ -98,8 +156,24 @@ class orderList extends Component {
                         <View style='padding: 15px 10px;background-color: #FAFBFC;text-align: left;' ><View>
                             <AtList>
                                 {
-                                    this.props.order.orderList.filter(order => { return order.status === 3 }).map(order => (
-                                        <AtListItem key={order.ID} title={`订单：${order.orderID}`} note={`下单时间: ${order.regDate}`} arrow='right' />
+                                    this.props.order.orderList.filter(order => { return order.status < 99 }).map(order => (
+                                        <View className="goodsList" key={order.ID}  onClick={()=>this.handleOnClickOrder(order)}>
+                                            <View className="a-gooods">
+                                                <View className="a-goods-conts">
+                                                    <View className="goods-info">
+                                                        <View className="img-box">
+                                                            <image mode="aspectFill" src={axios.defaults.baseURL + order.filename} className="img" />
+                                                        </View>
+                                                        <View className="text-box">
+                                                            <View className="goods-title">订单号:{order.orderID}</View>
+                                                            <View className="goods-title">{order.goodsName}</View>
+                                                            <View className="goods-price">X&nbsp;{order.qty}&nbsp;&nbsp;&nbsp;总价:¥ {order.price}</View>
+                                                        </View>
+                                                        <View className="order-title">{order.statusName}</View>
+                                                    </View>
+                                                </View>
+                                            </View>
+                                        </View>
                                     ))
                                 }
                             </AtList>

@@ -4,6 +4,9 @@ import Taro from "@tarojs/taro"
 import {
     AtInputNumber,
     AtForm,
+    AtButton,
+    AtCheckbox,
+    AtFab, AtActivityIndicator
 } from "taro-ui";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -11,11 +14,14 @@ import "taro-ui/dist/style/components/input-number.scss";
 import "taro-ui/dist/style/components/checkbox.scss";
 import "taro-ui/dist/style/components/icon.scss";
 import "taro-ui/dist/style/components/flex.scss";
+import "taro-ui/dist/style/components/fab.scss";
 import { actions as CartActions } from "../../modules/cart";
 import { actions as OrderActions } from "../../modules/order";
 import "./cart.css";
 import API_CART from "../../api/cart.json";
 import axios from "taro-axios";
+import "taro-ui/dist/style/components/activity-indicator.scss";
+import 'taro-ui/dist/style/components/loading.scss';
 
 class cart extends Component {
 
@@ -101,7 +107,15 @@ class cart extends Component {
 
     }
 
-    onSubmit(event) {
+    onSubmit = () => {
+        if (this.state.selected.length === 0) {
+            Taro.showToast({
+                title: '未选择商品',
+                icon: 'error',
+                duration: 2000
+            })
+            return
+        }
         console.log(this.state.selected)
         console.log(this.props.order.postPreOrderCart)
         this.props.orderActions.postPreOrderCart({ selList: this.state.selected });
@@ -164,7 +178,7 @@ class cart extends Component {
         if (!cartContent) {
             return (
                 <View>
-                    loading
+                    <AtActivityIndicator size={64}></AtActivityIndicator>
                 </View>
             )
         }
@@ -198,26 +212,19 @@ class cart extends Component {
                                                 </View>
                                             </View>
                                         </View>
-
                                     </View>
                                 </View>
                             </View>
                         ))}
                     </CheckboxGroup>
-                    <View>
-                        <Text>总计：{this.props.cart.postCalTotal ? this.props.cart.postCalTotal.total : 0}</Text>
+                    <View className="cart-title">
+                        <Text>总计需要支付：{this.props.cart.postCalTotal ? this.props.cart.postCalTotal.total : 0}</Text>
                     </View>
-                    <View>
-                        <Button className="delete-btn" onClick={() => this.handleSelectAll()}>全选</Button>
-                    </View>
-                    <View>
-                        <Button formType='submit'>结算</Button>
-                    </View>
-                    <View>
-                        <Button className="delete-btn" onClick={() => this.handleDelete()}>删除</Button>
-                    </View>
-                    <View>
-                        <Button onClick={() => this.onClickEmptyCart()}>清空</Button>
+                    <View className='at-row at-row__justify--around'>
+                        <View className='at-col at-col-2'> <AtButton circle size="small" type='secondary' onClick={() => this.handleSelectAll()}>全选</AtButton></View>
+                        <View className='at-col at-col-2'> <AtButton circle size="small" type='secondary' onClick={() => this.handleDelete()}>删除</AtButton></View>
+                        <View className='at-col at-col-2'> <AtButton circle size="small" type='secondary' onClick={() => this.onClickEmptyCart()}>清空</AtButton></View>
+                        <View className='at-col at-col-2'> <AtButton circle size="small" type='primary' onClick={() => this.onSubmit()}>去结算</AtButton></View>
                     </View>
                 </AtForm>
             </View>

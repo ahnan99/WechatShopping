@@ -34,17 +34,12 @@ class myAccount extends Component {
 
     render() {
         return (
-            <View>
+            <View className="sub-title">
                 <Text>我的订单</Text>
                 <AtGrid onClick={index => this.handleClickOrderType(index)} data={
                     [
                         {
                             image: 'https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png',
-                            value: '全部订单',
-                            index: 0
-                        },
-                        {
-                            image: 'https://img20.360buyimg.com/jdphoto/s72x72_jfs/t15151/308/1012305375/2300/536ee6ef/5a411466N040a074b.png',
                             value: '待付款',
                             index: 0
                         },
@@ -60,19 +55,19 @@ class myAccount extends Component {
                         },
                         {
                             image: 'https://img14.360buyimg.com/jdphoto/s72x72_jfs/t17251/336/1311038817/3177/72595a07/5ac44618Na1db7b09.png',
-                            value: '退款了',
+                            value: '退款退货',
                             index: 3
                         },
                         {
                             image: 'https://img30.360buyimg.com/jdphoto/s72x72_jfs/t5770/97/5184449507/2423/294d5f95/595c3b4dNbc6bc95d.png',
-                            value: '退货了',
+                            value: '全部订单',
                             index: 4
                         }
                     ]
                 } />
 
                 <Text>我的账户</Text>
-                <AtGrid mode='rect' onClick={() => this.handleClickMy()} data={
+                <AtGrid mode='rect' onClick={(item) => this.handleClickMy(item)} data={
                     [
                         {
                             image: 'https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png',
@@ -84,7 +79,7 @@ class myAccount extends Component {
                         {
                             image: 'https://img20.360buyimg.com/jdphoto/s72x72_jfs/t15151/308/1012305375/2300/536ee6ef/5a411466N040a074b.png',
                             value: '我推荐的人',
-                            url: '/pages/account/myProfile'
+                            url: '/pages/account/myReferee'
                         },
                         {
                             image: 'https://img10.360buyimg.com/jdphoto/s72x72_jfs/t5872/209/5240187906/2872/8fa98cd/595c3b2aN4155b931.png',
