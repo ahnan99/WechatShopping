@@ -35,7 +35,7 @@ class payment extends Component {
                     icon: 'success',
                     duration: 2000
                 })
-                Taro.navigateTo({ url: `/pages/order/orderList` })
+                Taro.reLaunch({ url: `/pages/order/orderList` })
             } else {
                 Taro.showToast({
                     title: '付款失败',
@@ -59,12 +59,12 @@ class payment extends Component {
                 <View className="pay-title">
                     <Text>支付类型：{this.props.order.preOrder?.amount}</Text>
                 </View>
-                
+
                 <View className='at-row at-row__justify--around'>
                     <View className='at-col at-col-4'><AtButton circle size="small" type='primary' onClick={() => this.handlePay()}>去付款</AtButton></View>
                 </View>
             </View>
-    )
+        )
     }
 }
 

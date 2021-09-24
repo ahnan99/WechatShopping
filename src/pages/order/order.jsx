@@ -9,6 +9,7 @@ import {
     AtInput,
     AtActivityIndicator
 } from 'taro-ui'
+import axios from "taro-axios";
 
 import { bindActionCreators } from "redux";
 import "taro-ui/dist/style/components/modal.scss";
@@ -34,7 +35,8 @@ class order extends Component {
             returnMemo: '',
             returnRevertMemo: '',
             isOpenOrderClose: false,
-            returnDelivery: ''
+            returnDelivery: '',
+            refundMemo: ''
         };
     }
 
@@ -182,7 +184,7 @@ class order extends Component {
     }
 
     handleSubmitCancelOrder = () => {
-        this.props.actions.postCancelOrder({ ID: this.props.order.orderInfo.ID })
+        this.props.actions.postCancelOrder({ ID: this.props.order.orderInfo.ID, memo: this.state.refundMemo })
     }
 
     handleSubmitRevertCancelOrder = () => {
@@ -220,7 +222,8 @@ class order extends Component {
             returnMemo: '',
             returnRevertMemo: '',
             isOpenOrderClose: false,
-            returnDelivery: ''
+            returnDelivery: '',
+            refundMemo: ''
         })
     }
 
@@ -256,6 +259,10 @@ class order extends Component {
                     <AtModalHeader>申请退款</AtModalHeader>
                     <AtModalContent>
                         <Text>确定要申请退款么？</Text>
+                        <AtTextarea
+                            value={this.state.refundMemo}
+                            onChange={this.handleChangeRefunMemo.bind(this)}
+                            placeholder='输入退款理由...' />
                     </AtModalContent>
                     <AtModalAction>
                         <AtButton onClick={this.handleClose} type='secondary' size='small'>取消</AtButton>
@@ -338,10 +345,30 @@ class order extends Component {
                         <AtButton onClick={() => this.handleSubmitOrderClose()} type='primary' size='small'>确定</AtButton>
                     </AtModalAction>
                 </AtModal>
-                <Text>订单编号：{this.props.order.orderInfo.ID}</Text>
+                <View className="goodsList" key={this.props.order.orderInfo.ID}>
+                    <View className="a-gooods">
+                        <View className="a-goods-conts">
+                            <View className="goods-info">
+                                <View className="img-box">
+                                    <image mode="aspectFill" src={axios.defaults.baseURL + this.props.order.orderInfo.filename} className="img" />
+                                </View>
+                                <View className="text-box">
+                                    <View className="goods-title">订单号:{this.props.order.orderInfo.orderID}</View>
+                                    <View className="goods-title">{this.props.order.orderInfo.goodsName}</View>
+                                    <View className="goods-price">X&nbsp;{this.props.order.orderInfo.qty}&nbsp;&nbsp;&nbsp;总价:¥ {this.props.order.orderInfo.price}</View>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+
                 {
                     this.props.order.orderInfo.opItems !== "" ? this.props.order.orderInfo.opItems?.split(",")?.map(item => (
-                        <AtButton type="primary" onClick={() => this.handleOnClick(item)}>{item}</AtButton>
+                        <View>
+                            <View className='at-row at-row__justify--around'>
+                                <View className='at-col at-col-3'> <AtButton circle size="small" type='primary' onClick={() => this.handleOnClick(item)}>{item}</AtButton></View>
+                            </View>
+                        </View>
                     )) : null
                 }
             </View>

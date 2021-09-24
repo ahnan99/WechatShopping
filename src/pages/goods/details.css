@@ -133,7 +133,7 @@ swiper-item image {
 
 .goods-info {
   background-color: #fff;
-  padding-top: 35rpx;
+  padding-top: 10rpx;
   width: 100%;
   position: relative;
 }
@@ -202,7 +202,7 @@ swiper-item image {
   font-size: 25rpx;
   line-height: 1.4;
   color: #CC0000;
-  padding-top: 26rpx;
+  padding-top: 10rpx;
 }
 
 .vcell{
@@ -738,7 +738,7 @@ swiper-item image {
   border-radius: 16rpx;
 }
 .characteristic {
-  padding: 8rpx 32rpx;
+  padding: 5rpx 32rpx;
   color: #666;
   font-size: 26rpx;
 }

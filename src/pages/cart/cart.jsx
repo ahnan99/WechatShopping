@@ -199,8 +199,8 @@ class cart extends Component {
                                             </View>
                                             <View className="text-box">
                                                 <View className="goods-title">{item.goodsName}</View>
-                                                <View className="goods-title">{item.size}</View>
-                                                <View className="goods-price">¥ {item.price}</View>
+                                                <View className="goods-title">规格：{item.size}</View>
+                                                <View className="goods-price">单价：¥ {item.price}</View>
                                                 <View className="buy-num">
                                                     <AtInputNumber
                                                         min={1}

@@ -20,7 +20,7 @@ class myPointList extends Component {
                 <AtList>
                     {
                         this.props.user.pointList?.map(point => (
-                            <AtListItem title={`积分：${point.points}  类型：${point.typeName}`} note={`订单号${point.orderID}  获得时间: ${point.regDate}`} />
+                            <AtListItem title={`积分：${point.points}    [${point.markName + '  ' + point.typeName}]`} note={`订单号${point.orderID}  获得时间: ${point.regDate}`} />
                         ))
                     }
                 </AtList>

@@ -167,9 +167,13 @@ class details extends Component {
                             </View>
                         </View>
                     </View>
+                </View>
+                <View className="goods-info">
                     <View className="goods-title">
                         <Text>{good.item_detail}</Text>
                     </View>
+                </View>
+                <View className="goods-info">
                     <View className="characteristic">
                         <View>规格：{good.size}&nbsp;&nbsp;&nbsp;&nbsp;生产商：{good.manufacturer}</View>
                         {good.returnDays===0?
@@ -177,6 +181,8 @@ class details extends Component {
                             <View>支持{good.returnDays}天无理由退货</View>
                         }
                     </View>
+                </View>
+                <View className="goods-info">
                     <View className="goods-share">
                         <Text>积分奖励：{good.points}点</Text>
                     </View>

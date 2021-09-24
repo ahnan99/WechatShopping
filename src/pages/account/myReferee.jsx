@@ -26,7 +26,7 @@ class myReferee extends Component {
                 <AtList>
                     {
                         this.props.user.refereeList?.map(referee => (
-                            <AtListItem title={`昵称：${referee.nickName}  积分贡献：${referee.points}  注册时间：${referee.regDate}`} />
+                            <AtListItem title={`${referee.nickName}  注册：${referee.regDate}  积分贡献：${referee.points}`} />
                         ))
                     }
                 </AtList>

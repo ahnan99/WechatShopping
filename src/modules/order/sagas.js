@@ -95,6 +95,21 @@ function* postOrderCloseWatch() {
     yield takeLatest(types.POST_ORDER_CLOSE, postOrderCloseWorker)
 }
 
+function* getRegionListWatch() {
+    yield takeLatest(types.GET_REGION_LIST, getRegionListWorker)
+}
+
+function* getCityListWatch() {
+    yield takeLatest(types.GET_CITY_LIST, getCityListWorker)
+}
+
+
+function* getDitrictListWatch() {
+    yield takeLatest(types.GET_DISTRICT_LIST, getDistrictListWorker)
+}
+
+
+
 export function postPreOrderCartEndpoint(data) {
     return axios.post('/orders/genPreOrderByCart', data)
 }
@@ -188,6 +203,13 @@ export function postReturnDeliveryEndpoint(data) {
 export function postOrderCloseEndpoint(data) {
     return axios.post('/orders/orderClose', data)
 }
+
+export function getLocationEndpoint(data) {
+    return axios.get('/users/getCityList', {
+        params: data
+    })
+}
+
 
 function* postPreOrderCartWorker(action) {
     try {
@@ -389,6 +411,33 @@ function* postOrderCloseWorker(action) {
     }
 }
 
+function* getCityListWorker(action) {
+    try {
+        const response = yield call(getLocationEndpoint, action.payload)
+        yield put(actions.updateCityList(response.data))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+function* getRegionListWorker(action) {
+    try {
+        const response = yield call(getLocationEndpoint, action.payload)
+        yield put(actions.updateRegionList(response.data))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+function* getDistrictListWorker(action) {
+    try {
+        const response = yield call(getLocationEndpoint, action.payload)
+        yield put(actions.updateDistrictList(response.data))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const workers = {
     postPreOrderCartWorker,
     postPreOrderGoodsWorker,
@@ -410,7 +459,10 @@ export const workers = {
     postRevertCancelOrderWorker,
     postRevertReturnRequirementWorker,
     postOrderCloseWorker,
-    postReturnDeliveryWorker
+    postReturnDeliveryWorker,
+    getCityListWorker,
+    getRegionListWorker,
+    getDistrictListWorker
 }
 
 export default function* saga() {
@@ -436,6 +488,10 @@ export default function* saga() {
         postRevertCancelOrderWatch(),
         postRevertReturnRequirementWatch(),
         postReturnDeliveryWatch(),
-        postOrderCloseWatch()
+        postOrderCloseWatch(),
+        getRegionListWatch(),
+        getCityListWatch(),
+        getDitrictListWatch()
+
     ])
 }

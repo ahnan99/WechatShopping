@@ -42,6 +42,12 @@ const POST_RETURN_DELIVERY = "post_return_delivery"
 const UPDATE_POST_RETURN_DELIVERY = "update_post_return_delivery"
 const POST_ORDER_CLOSE = "post_order_close"
 const UPDATE_POST_ORDER_CLOSE = "update_post_order_close"
+const GET_CITY_LIST = "get_city_list"
+const UPDATE_CITY_LIST = "update_city_list"
+const GET_DISTRICT_LIST = "get_distinct_list"
+const UPDATE_DISTRICT_LIST = "update_distinct_list"
+const GET_REGION_LIST = "get_region_list"
+const UPDATE_REGION_LIST = "update_region_list"
 
 
 
@@ -90,7 +96,13 @@ export const types = {
     POST_RETURN_DELIVERY,
     UPDATE_POST_RETURN_DELIVERY,
     POST_ORDER_CLOSE,
-    UPDATE_POST_ORDER_CLOSE
+    UPDATE_POST_ORDER_CLOSE,
+    GET_CITY_LIST,
+    UPDATE_CITY_LIST,
+    GET_DISTRICT_LIST,
+    UPDATE_DISTRICT_LIST,
+    GET_REGION_LIST,
+    UPDATE_REGION_LIST
 };
 
 const postPreOrderCart = (payload) => ({
@@ -314,6 +326,38 @@ const updatePostOrderClose = (data) => ({
     data,
 });
 
+//todo
+const getCityList = (payload) => ({
+    type: GET_CITY_LIST,
+    payload,
+});
+
+const updateCityList = (data) => ({
+    type: UPDATE_CITY_LIST,
+    data,
+});
+
+const getDistrictList = (payload) => ({
+    type: GET_DISTRICT_LIST,
+    payload,
+});
+
+const updateDistrictList = (data) => ({
+    type: UPDATE_DISTRICT_LIST,
+    data,
+});
+
+const getRegionList = (payload) => ({
+    type: GET_REGION_LIST,
+    payload,
+});
+
+const updateRegionList = (data) => ({
+    type: UPDATE_REGION_LIST,
+    data,
+});
+
+
 export const actions = {
     postPreOrderCart,
     updatePostPreOrderCart,
@@ -358,7 +402,13 @@ export const actions = {
     postReturnDelivery,
     updatePostReturnDelivery,
     postOrderClose,
-    updatePostOrderClose
+    updatePostOrderClose,
+    getCityList,
+    updateCityList,
+    getDistrictList,
+    updateDistrictList,
+    getRegionList,
+    updateRegionList
 };
 
 const initialState = {
@@ -382,7 +432,10 @@ const initialState = {
     postRevertCancelOrder: null,
     postRevertReturnRequirement: null,
     postReturnDelivery: null,
-    postOrderClose: null
+    postOrderClose: null,
+    cityList: null,
+    regionList: null,
+    districtList: null
 };
 
 const reducer = (state = initialState, action = {}) => {
@@ -517,6 +570,24 @@ const reducer = (state = initialState, action = {}) => {
             return {
                 ...state,
                 postReturnRequirement: action.data,
+            };
+        }
+        case UPDATE_REGION_LIST: {
+            return {
+                ...state,
+                regionList: action.data,
+            };
+        }
+        case UPDATE_DISTRICT_LIST: {
+            return {
+                ...state,
+                districtList: action.data,
+            };
+        }
+        case UPDATE_CITY_LIST: {
+            return {
+                ...state,
+                cityList: action.data,
             };
         }
         default: {
