@@ -27,6 +27,16 @@ axios.interceptors.request.use(function (config) {
     }
     return config;
 });
+axios.interceptors.response.use(function (response) {
+    if(response.data && response.data.status === 99){
+        this.login()
+    }
+    return response;
+  }, function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    return Promise.reject(error);
+  });
 class goods extends Component {
 
     constructor() {
