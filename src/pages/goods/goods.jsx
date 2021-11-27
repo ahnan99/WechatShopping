@@ -19,7 +19,7 @@ import axios from "taro-axios";
 import "taro-ui/dist/style/components/activity-indicator.scss";
 import 'taro-ui/dist/style/components/loading.scss';
 
-axios.defaults.baseURL = "https://c236-2409-8a1e-6c5d-c6f0-e004-661c-5b43-6eff.ngrok.io";
+axios.defaults.baseURL = "https://yuanqingsong.com";
 axios.interceptors.request.use(function (config) {
     if (Taro.getStorageSync('authorize')) {
         const token = Taro.getStorageSync('authorize');
