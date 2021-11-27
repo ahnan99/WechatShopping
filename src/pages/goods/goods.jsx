@@ -27,16 +27,7 @@ axios.interceptors.request.use(function (config) {
     }
     return config;
 });
-axios.interceptors.response.use(function (response) {
-    if(response.data && response.data.status === 99){
-        this.login()
-    }
-    return response;
-  }, function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
-    return Promise.reject(error);
-  });
+
 class goods extends Component {
 
     constructor() {
@@ -45,6 +36,17 @@ class goods extends Component {
             value: '',
             text: '热门商品'
         }
+        axios.interceptors.response.use((response) => {
+            if (response.data && response.data.status === 99) {
+
+            }
+            return response;
+        }, (error) => {
+            this.login()
+            // Any status codes that falls outside the range of 2xx cause this function to trigger
+            // Do something with response error
+            return Promise.reject(error);
+        });
     }
 
     componentDidMount() {
@@ -56,8 +58,9 @@ class goods extends Component {
 
 
     componentDidUpdate = prevProps => {
-        if (prevProps.goods.topGoods != this.props.goods.topGoods) {
-
+        if (prevProps.user.authorize !== this.props.user.authorize) {
+            console.log('chongxindenglu')
+            this.componentDidShow()
         }
     }
 
@@ -99,7 +102,7 @@ class goods extends Component {
     }
 
     fetchMember = () => {
-        console.log("get member")
+        //console.log("get member")
         this.props.actions.getMember({ memberID: this.props.user.memberID })
     }
 
@@ -133,7 +136,7 @@ class goods extends Component {
     login = async () => {
         //login
         let res = await Taro.login();
-        console.log("login", res)
+        //console.log("login", res)
         //获取token
         let response = await Taro.request({
             url: `${axios.defaults.baseURL}/users/getAccessToken?code=${res.code}`,
@@ -143,7 +146,7 @@ class goods extends Component {
         if (response.data && response.data.token) {
             //写入token
             let authorize = response.data.token;
-            console.log(response.data.token);
+            //console.log(response.data.token);
             this.props.userActions.updateMemberID(response.data.memberID);
             this.saveAuthToken(authorize);
             return true;
@@ -155,50 +158,48 @@ class goods extends Component {
 
     saveAuthToken = (authorize) => {
         //写入状态管理
-        console.log("chengle", authorize);
+        //console.log("chengle", authorize);
         this.props.userActions.updateUserLogin(authorize)
         //写入缓存
         Taro.setStorageSync('authorize', authorize)
     }
 
     render() {
-
-        const { topGoods } = this.props.goods;
-        const kindList = this.props.goods.goodsKind?.map(obj => { if (obj) { return obj.kindName } })
-        if (topGoods === "err") {
+        //console.log("goodsKInd", this.props.goods.goodsKind)
+        if (!this.props.goods.goodsKind || !this.props.goods.topGoods) {
             return (
                 <View>
-                    没登陆
+                    loading
+                </View>
+            )
+        } else {
+            const { topGoods } = this.props.goods;
+            return (
+
+                <View>
+
+                    <AtSearchBar actionName='搜一下' value={this.state.value} onChange={this.onChange.bind(this)} onActionClick={this.onActionClick.bind(this)} />
+                    <View className='at-row at-row__justify--around'>
+                        {this.props.goods.goodsKind.map(kind => (
+                            <View className='at-col at-col-2'> <AtButton circle size="small" type='secondary' onClick={() => this.handleKindClick(kind)}>{kind.kindName}</AtButton></View>
+                        ))}
+                    </View>
+                    <View style={{ textAlign: "center", margin: "30rpx" }}><image className="table-icon-tuijian" src="http://shznxfxx.cn/images/recommend.png"></image> {this.state.text}</View>
+                    <View className="goods-container">
+                        {topGoods ? topGoods.map(good => (
+                            <View className="goods-box" key={good.ID} onClick={() => this.onClickItem(good)}>
+                                <View className='img-box'><Image className="image" src={`${axios.defaults.baseURL}${good.filename}`} mode="aspectFill"></Image></View>
+                                <View className='goods-title van-multi-ellipsis--l2'>{good.goodsName + '  ' + good.size}</View>
+                                <View style={{ display: "flex" }}>
+                                    <View className="goods-price">¥{good.price}</View>
+                                </View>
+                            </View>
+                        )) : <AtActivityIndicator size={64}></AtActivityIndicator>}
+                    </View>
                 </View>
             )
         }
-        return (
 
-            <View>
-
-
-
-
-                <AtSearchBar actionName='搜一下' value={this.state.value} onChange={this.onChange.bind(this)} onActionClick={this.onActionClick.bind(this)} />
-                <View className='at-row at-row__justify--around'>
-                    {this.props.goods.goodsKind?.map(kind => (
-                        <View className='at-col at-col-2'> <AtButton circle size="small" type='secondary' onClick={() => this.handleKindClick(kind)}>{kind.kindName}</AtButton></View>
-                    ))}
-                </View>
-                <View style={{ textAlign: "center",margin:"30rpx" }}><image className="table-icon-tuijian" src="http://shznxfxx.cn/images/recommend.png"></image> {this.state.text}</View>
-                <View className="goods-container">
-                    {topGoods ? topGoods.map(good => (
-                        <View className="goods-box" key={good.ID} onClick={() => this.onClickItem(good)}>
-                            <View className='img-box'><Image className="image" src={`${axios.defaults.baseURL}${good.filename}`} mode="aspectFill"></Image></View>
-                            <View className='goods-title van-multi-ellipsis--l2'>{good.goodsName}</View>
-                            <View style={{ display: "flex" }}>
-                                <View className="goods-price">¥{good.price}</View>
-                            </View>
-                        </View>
-                    )) : <AtActivityIndicator size={64}></AtActivityIndicator>}
-                </View>
-            </View>
-        )
     }
 }
 
