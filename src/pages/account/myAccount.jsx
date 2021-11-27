@@ -31,15 +31,6 @@ class myAccount extends Component {
         Taro.navigateTo({ url: item.url })
     }
 
-    fetch = () => {
-        Taro.getUserProfile({
-            desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-            success: (res) => {
-                console.log(res.userInfo)
-            }
-        })
-    }
-
 
     componentDidShow() {
         this.props.actions.getMember({ memberID: this.props.user.memberID })

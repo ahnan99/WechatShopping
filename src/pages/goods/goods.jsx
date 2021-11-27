@@ -3,7 +3,7 @@ import { View, Button, Text, Image } from "@tarojs/components";
 import { AtSearchBar, AtDrawer, AtButton, AtActivityIndicator } from 'taro-ui'
 import Taro from '@tarojs/taro'
 import { connect } from "react-redux";
-
+import Popup from "../account/Popup"
 import { bindActionCreators } from "redux";
 import "taro-ui/dist/style/components/flex.scss";
 import "taro-ui/dist/style/components/search-bar.scss";
@@ -50,9 +50,7 @@ class goods extends Component {
     }
 
     componentDidMount() {
-        if (!this.checkAuth()) {
-            this.login()
-        }
+
     }
 
 
@@ -65,6 +63,9 @@ class goods extends Component {
     }
 
     componentDidShow() {
+        if (!this.checkAuth()) {
+            this.login()
+        }
         this.props.actions.getGoodsKind();
         this.props.actions.getTopGoods();
     }
@@ -136,17 +137,25 @@ class goods extends Component {
     login = async () => {
         //login
         let res = await Taro.login();
+        
         //console.log("login", res)
         //获取token
         let response = await Taro.request({
             url: `${axios.defaults.baseURL}/users/getAccessToken?code=${res.code}`,
             method: 'GET'
         })
+        console.log(res);
         //判断是否成功
         if (response.data && response.data.token) {
             //写入token
             let authorize = response.data.token;
             //console.log(response.data.token);
+            if(response.data.status === 0){
+                this.props.userActions.updateInfoCompleted(true)
+            }else if(response.data.status === 1){
+                this.props.userActions.updateInfoCompleted(false)
+            }
+            this.props.userActions.updateSessionKey(response.data.session_key)
             this.props.userActions.updateMemberID(response.data.memberID);
             this.saveAuthToken(authorize);
             return true;
@@ -177,7 +186,7 @@ class goods extends Component {
             return (
 
                 <View>
-
+                    <Popup isOpened={!this.props.user.infoCompleted} />
                     <AtSearchBar actionName='搜一下' value={this.state.value} onChange={this.onChange.bind(this)} onActionClick={this.onActionClick.bind(this)} />
                     <View className='at-row at-row__justify--around'>
                         {this.props.goods.goodsKind.map(kind => (

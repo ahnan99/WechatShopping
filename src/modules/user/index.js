@@ -8,6 +8,10 @@ const GET_REFEREE_LIST = "get_referee_list";
 const UPDATE_REFEREE_LIST = "update_referee_list";
 const GET_POINT_LIST = "get_point_list";
 const UPDATE_POINT_LIST = "update_point_list";
+const UPDATE_INFO_COMPLETED = "update_info_completed"
+const POST_INFO = "post_info"
+const UPDATE_POST_INFO = "update_post_info"
+const UPDATE_SESSION_KEY = "update_session_key"
 
 export const types = {
   REQUEST_LOGIN,
@@ -20,6 +24,10 @@ export const types = {
   UPDATE_REFEREE_LIST,
   GET_POINT_LIST,
   UPDATE_POINT_LIST,
+  UPDATE_INFO_COMPLETED,
+  POST_INFO,
+  UPDATE_POST_INFO,
+  UPDATE_SESSION_KEY
 };
 
 const requestLogin = (payload) => ({
@@ -39,6 +47,11 @@ const getMember = (payload) => ({
 
 const updateMember = (data) => ({
   type: UPDATE_MEMBER,
+  data,
+});
+
+const updateInfoCompleted = (data) => ({
+  type: UPDATE_INFO_COMPLETED,
   data,
 });
 
@@ -72,6 +85,21 @@ const updatePointList = (data) => ({
   data,
 });
 
+const postInfo = (payload) => ({
+  type: POST_INFO,
+  payload,
+});
+
+const updatePostInfo = (data) => ({
+  type: UPDATE_MEMBERID,
+  data,
+});
+
+const updateSessionKey = (data) => ({
+  type: UPDATE_SESSION_KEY,
+  data,
+});
+
 export const actions = {
   requestLogin,
   updateUserLogin,
@@ -83,6 +111,10 @@ export const actions = {
   updateRefereeList,
   getPointList,
   updatePointList,
+  updateInfoCompleted,
+  postInfo,
+  updatePostInfo,
+  updateSessionKey
 };
 
 const initialState = {
@@ -93,6 +125,9 @@ const initialState = {
   member: null,
   refereeList: null,
   pointList: null,
+  infoCompleted: true,
+  postInfo: null,
+  session_key: null,
 };
 
 const reducer = (state = initialState, action = {}) => {
@@ -132,6 +167,24 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         pointList: action.data,
       };
+    }
+    case UPDATE_INFO_COMPLETED: {
+      return {
+        ...state,
+        infoCompleted: action.data
+      }
+    }
+    case UPDATE_POST_INFO: {
+      return {
+        ...state,
+        postInfo: action.data
+      }
+    }
+    case UPDATE_SESSION_KEY: {
+      return {
+        ...state,
+        session_key: action.data
+      }
     }
     default: {
       return {

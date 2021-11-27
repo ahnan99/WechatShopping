@@ -20,6 +20,10 @@ function* getPointListWatch() {
     yield takeLatest(types.GET_POINT_LIST, getPointListWorker)
 }
 
+function* postInfoWatch() {
+    yield takeLatest(types.POST_INFO, postInfoWorker)
+}
+
 export function userLoginEndpoint(data) {
     return axios.get('/users/login?referee=xs2s', {
         params: data
@@ -43,6 +47,10 @@ export function getPointListEndpoint(data) {
     return axios.get('/users/getPointsList', {
         params: data
     })
+}
+
+export function postInfoEndpoint(data) {
+    return axios.post('/users/updateMemberInfo', data)
 }
 
 function* userLoginWorker(action) {
@@ -81,11 +89,21 @@ function* getPointListWorker(action) {
     }
 }
 
+function* postInfoWorker(action) {
+    try {
+        const response = yield call(postInfoEndpoint, action.payload)
+        yield put(actions.updatePostInfo(response.data))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const workers = {
     userLoginWorker,
     getMemberWorker,
     getRefereeListWorker,
-    getPointListWorker
+    getPointListWorker,
+    postInfoWorker
 }
 
 export default function* saga() {
@@ -93,6 +111,7 @@ export default function* saga() {
         loginWatch(),
         getMemberWatch(),
         getRefereeListWatch(),
-        getPointListWatch()
+        getPointListWatch(),
+        postInfoWatch()
     ])
 }

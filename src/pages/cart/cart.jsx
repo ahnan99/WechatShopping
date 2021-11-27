@@ -18,6 +18,7 @@ import "taro-ui/dist/style/components/fab.scss";
 import { actions as CartActions } from "../../modules/cart";
 import { actions as OrderActions } from "../../modules/order";
 import "./cart.css";
+import Popup from "../account/Popup"
 import API_CART from "../../api/cart.json";
 import axios from "taro-axios";
 import "taro-ui/dist/style/components/activity-indicator.scss";
@@ -235,7 +236,8 @@ class cart extends Component {
 
 const mapStateToProps = (state) => ({
     cart: state.cart,
-    order: state.order
+    order: state.order,
+    user: state.user
 });
 
 const mapDispatchToProps = (dispatch) => ({
