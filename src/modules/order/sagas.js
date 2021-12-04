@@ -140,6 +140,10 @@ export function getOrderInfoEndpoint(data) {
     })
 }
 
+export function postPayPreOrderEndpoint(data) {
+    return axios.post('/orders/preOrderPay', data)
+}
+
 export function getAddressListEndpoint() {
     return axios.get('/users/getAddressList')
 }
@@ -190,10 +194,6 @@ export function postReturnRequirementEndpoint(data) {
 
 export function postRevertReturnRequirementEndpoint(data) {
     return axios.post('/orders/orderReturnAskforCancel', data)
-}
-
-export function postPayPreOrderEndpoint(data) {
-    return axios.post('/orders/pay4PreOrder', data)
 }
 
 export function postReturnDeliveryEndpoint(data) {
@@ -284,6 +284,14 @@ function* postAddressWorker(action) {
     }
 }
 
+function* postPayPreOrderWorker(action){
+    try {
+        const response = yield call(postPayPreOrderEndpoint, action.payload)
+        yield put(actions.updatePostPayPreOrder(response.data))
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 function* postDelAddressWorker(action) {
     try {
@@ -384,15 +392,6 @@ function* postRevertReturnRequirementWorker(action) {
     }
 }
 
-function* postPayPreOrderWorker(action) {
-    try {
-        const response = yield call(postPayPreOrderEndpoint, action.payload)
-        yield put(actions.updatePostPayPreOrder(response.data))
-    } catch (error) {
-        console.log(error)
-    }
-}
-
 function* postReturnDeliveryWorker(action) {
     try {
         const response = yield call(postReturnDeliveryEndpoint, action.payload)
@@ -462,7 +461,7 @@ export const workers = {
     postReturnDeliveryWorker,
     getCityListWorker,
     getRegionListWorker,
-    getDistrictListWorker
+    getDistrictListWorker, 
 }
 
 export default function* saga() {
@@ -491,7 +490,7 @@ export default function* saga() {
         postOrderCloseWatch(),
         getRegionListWatch(),
         getCityListWatch(),
-        getDitrictListWatch()
-
+        getDitrictListWatch(),
+        postPayPreOrderWatch()
     ])
 }

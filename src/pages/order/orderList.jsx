@@ -18,6 +18,19 @@ class orderList extends Component {
         super()
         this.state = {
             current: Taro.getCurrentInstance().router.params.current ? Number(Taro.getCurrentInstance().router.params.current) : 0,
+            payment: Taro.getCurrentInstance().router.params.payment ? true : false
+        }
+    }
+
+    componentDidMount() {
+        if (this.state.current === 1 && this.state.payment == true) {
+            this.setState({ payment: false });
+            Taro.showToast({
+                title: '付款成功',
+                icon: 'success',
+                duration: 2000
+            })
+
         }
     }
 
@@ -32,13 +45,14 @@ class orderList extends Component {
         console.log(this.state.current)
     }
 
+
     componentWillHide() {
         this.props.actions.updateOrderList(null)
         this.props.actions.updatePreOrderList(null)
     }
 
     handleOnClick = item => {
-        Taro.navigateTo({url: `/pages/order/payment?orderID=${item.ID}`})
+        Taro.navigateTo({ url: `/pages/order/payment?orderID=${item.ID}` })
     }
 
     handleOnClickOrder = order => {
@@ -58,10 +72,10 @@ class orderList extends Component {
                             <AtList>
                                 {
                                     this.props.order.preOrderList.map(order => (
-                                        <AtListItem onClick={() => this.handleOnClick(order)} key={order.ID} 
-                                            title={`#${order.ID}   X ${order.qty}  金额:${order.amount}`} 
-                                            note={`下单:${order.regDate}`} 
-                                            extraText={`${order.statusName}`} 
+                                        <AtListItem onClick={() => this.handleOnClick(order)} key={order.ID}
+                                            title={`#${order.ID}   X ${order.qty}  金额:${order.amount}`}
+                                            note={`下单:${order.regDate}`}
+                                            extraText={`${order.statusName}`}
                                             thumb='http://img12.360buyimg.com/jdphoto/s72x72_jfs/t10660/330/203667368/1672/801735d7/59c85643N31e68303.png'
                                             arrow='right' />
                                     ))
@@ -75,7 +89,7 @@ class orderList extends Component {
                             <AtList>
                                 {
                                     this.props.order.orderList.filter(order => { return order.status === 0 }).map(order => (
-                                        <View className="goodsList" key={order.ID}  onClick={()=>this.handleOnClickOrder(order)}>
+                                        <View className="goodsList" key={order.ID} onClick={() => this.handleOnClickOrder(order)}>
                                             <View className="a-gooods">
                                                 <View className="a-goods-conts">
                                                     <View className="goods-info">
@@ -103,7 +117,7 @@ class orderList extends Component {
                             <AtList>
                                 {
                                     this.props.order.orderList.filter(order => { return order.status === 1 }).map(order => (
-                                        <View className="goodsList" key={order.ID}  onClick={()=>this.handleOnClickOrder(order)}>
+                                        <View className="goodsList" key={order.ID} onClick={() => this.handleOnClickOrder(order)}>
                                             <View className="a-gooods">
                                                 <View className="a-goods-conts">
                                                     <View className="goods-info">
@@ -129,8 +143,8 @@ class orderList extends Component {
                         <View style='padding: 15px 10px;background-color: #FAFBFC;text-align: left;' ><View>
                             <AtList>
                                 {
-                                    this.props.order.orderList.filter(order => { return order.status >= 3 && order.status <= 8}).map(order => (
-                                        <View className="goodsList" key={order.ID}  onClick={()=>this.handleOnClickOrder(order)}>
+                                    this.props.order.orderList.filter(order => { return order.status >= 3 && order.status <= 8 }).map(order => (
+                                        <View className="goodsList" key={order.ID} onClick={() => this.handleOnClickOrder(order)}>
                                             <View className="a-gooods">
                                                 <View className="a-goods-conts">
                                                     <View className="goods-info">
@@ -157,7 +171,7 @@ class orderList extends Component {
                             <AtList>
                                 {
                                     this.props.order.orderList.filter(order => { return order.status < 99 }).map(order => (
-                                        <View className="goodsList" key={order.ID}  onClick={()=>this.handleOnClickOrder(order)}>
+                                        <View className="goodsList" key={order.ID} onClick={() => this.handleOnClickOrder(order)}>
                                             <View className="a-gooods">
                                                 <View className="a-goods-conts">
                                                     <View className="goods-info">

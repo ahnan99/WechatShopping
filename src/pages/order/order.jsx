@@ -245,6 +245,12 @@ class order extends Component {
             returnDelivery
         })
     }
+
+    handleChangeRefundMemo(refundMemo) {
+        this.setState({ refundMemo })
+    }
+
+
     render() {
         if (!this.props.order.orderInfo) {
             return (
@@ -261,7 +267,7 @@ class order extends Component {
                         <Text>确定要申请退款么？</Text>
                         <AtTextarea
                             value={this.state.refundMemo}
-                            onChange={this.handleChangeRefunMemo.bind(this)}
+                            onChange={this.handleChangeRefundMemo.bind(this)}
                             placeholder='输入退款理由...' />
                     </AtModalContent>
                     <AtModalAction>

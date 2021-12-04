@@ -51,7 +51,6 @@ const UPDATE_REGION_LIST = "update_region_list"
 
 
 
-
 export const types = {
     POST_PRE_ORDER_CART,
     UPDATE_POST_PRE_ORDER_CART,
@@ -102,7 +101,7 @@ export const types = {
     GET_DISTRICT_LIST,
     UPDATE_DISTRICT_LIST,
     GET_REGION_LIST,
-    UPDATE_REGION_LIST
+    UPDATE_REGION_LIST,
 };
 
 const postPreOrderCart = (payload) => ({
