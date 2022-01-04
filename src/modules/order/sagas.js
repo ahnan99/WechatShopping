@@ -95,6 +95,11 @@ function* postOrderCloseWatch() {
     yield takeLatest(types.POST_ORDER_CLOSE, postOrderCloseWorker)
 }
 
+function* deleteAddressWatch() {
+    yield takeLatest(types.DELETE_ADDRESS, deleteAddressWorker)
+}
+
+
 function* getRegionListWatch() {
     yield takeLatest(types.GET_REGION_LIST, getRegionListWorker)
 }
@@ -108,6 +113,13 @@ function* getDitrictListWatch() {
     yield takeLatest(types.GET_DISTRICT_LIST, getDistrictListWorker)
 }
 
+function* getShippmentWatch() {
+    yield takeLatest(types.GET_SHIPPMENT, getShippmentWorker)
+}
+
+function* getAddressWatch() {
+    yield takeLatest(types.GET_ADDRESS, getAddressWorker)
+}
 
 
 export function postPreOrderCartEndpoint(data) {
@@ -122,6 +134,10 @@ export function postPreOrderMemoEndpoint(data) {
     return axios.post('/orders/setPreOrderDetailMemo', data)
 }
 
+export function deleteAddressEndpoint(data) {
+    return axios.post('/users/delAddress', data)
+}
+
 export function getPreOrderEndpoint(data) {
     return axios.get('/orders/getPreOrderInfo', {
         params: data
@@ -130,6 +146,12 @@ export function getPreOrderEndpoint(data) {
 
 export function getPreOrderDetailEndpoint(data) {
     return axios.get('/orders/getPreOrderDetail', {
+        params: data
+    })
+}
+
+export function getAddressEndpoint(data) {
+    return axios.get('/users/getAddress', {
         params: data
     })
 }
@@ -210,6 +232,12 @@ export function getLocationEndpoint(data) {
     })
 }
 
+export function getShippmentEndpoint(data) {
+    return axios.get('/public/getLogisticsInfo', {
+        params: data
+    })
+}
+
 
 function* postPreOrderCartWorker(action) {
     try {
@@ -233,6 +261,15 @@ function* postPreOrderMemoWorker(action) {
     try {
         const response = yield call(postPreOrderMemoEndpoint, action.payload)
         yield put(actions.updatePostPreOrderMemo(response.data))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+function* deleteAddressWorker(action) {
+    try {
+        const response = yield call(deleteAddressEndpoint, action.payload)
+        yield put(actions.updateDeleteAddress(response.data))
     } catch (error) {
         console.log(error)
     }
@@ -275,6 +312,16 @@ function* getAddressListWorker() {
     }
 }
 
+function* getAddressWorker(action) {
+    try {
+        const response = yield call(getAddressEndpoint, action.payload)
+        yield put(actions.updateAddress(response.data))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 function* postAddressWorker(action) {
     try {
         const response = yield call(postAddressEndpoint, action.payload)
@@ -284,7 +331,7 @@ function* postAddressWorker(action) {
     }
 }
 
-function* postPayPreOrderWorker(action){
+function* postPayPreOrderWorker(action) {
     try {
         const response = yield call(postPayPreOrderEndpoint, action.payload)
         yield put(actions.updatePostPayPreOrder(response.data))
@@ -333,6 +380,15 @@ function* getPreOrderListWorker() {
     try {
         const response = yield call(getPreOrderListEndpoint)
         yield put(actions.updatePreOrderList(response.data))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+function* getShippmentWorker(action) {
+    try {
+        const response = yield call(getShippmentEndpoint, action.payload)
+        yield put(actions.updateShippment(response.data))
     } catch (error) {
         console.log(error)
     }
@@ -461,7 +517,9 @@ export const workers = {
     postReturnDeliveryWorker,
     getCityListWorker,
     getRegionListWorker,
-    getDistrictListWorker, 
+    getDistrictListWorker,
+    getAddressWorker,
+    deleteAddressWorker
 }
 
 export default function* saga() {
@@ -491,6 +549,9 @@ export default function* saga() {
         getRegionListWatch(),
         getCityListWatch(),
         getDitrictListWatch(),
-        postPayPreOrderWatch()
+        postPayPreOrderWatch(),
+        getShippmentWatch(),
+        getAddressWatch(),
+        deleteAddressWatch()
     ])
 }

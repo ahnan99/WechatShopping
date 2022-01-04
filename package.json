@@ -41,8 +41,6 @@
     "@tarojs/react": "3.3.0",
     "@tarojs/runtime": "3.3.0",
     "@tarojs/taro": "3.3.0",
-    "@ui5/webcomponents": "^1.0.0-rc.14",
-    "@ui5/webcomponents-react": "^0.16.6",
     "axios": "^0.21.1",
     "crypto": "^1.0.1",
     "react": "^17.0.0",

@@ -18,7 +18,7 @@ class preOrder extends Component {
     constructor() {
         super(...arguments)
         this.state = {
-            value: this.props.order.preOrder ? this.props.order.preOrder.addressID : '',
+            value: '',
             text: {},
         }
     }
@@ -75,6 +75,13 @@ class preOrder extends Component {
             console.log(textState)
             this.setState({ text: textState })
         }
+        if (!prevProps.order.addressList && this.props.order.addressList) {
+            console.log("set initial address")
+            if (this.props.order.addressList.length > 0) {
+                this.setState({ value: this.props.order.addressList[0].ID});
+
+            }
+        }
 
     }
 
@@ -85,6 +92,10 @@ class preOrder extends Component {
 
     handleAddReceiver = () => {
         Taro.navigateTo({ url: `/pages/order/receiverDetail` })
+    }
+
+    handleEditReceiver = () => {
+        Taro.navigateTo({ url: `/pages/order/receiverDetail?change=${this.state.value}` })
     }
 
     componentDidShow() {
@@ -101,12 +112,14 @@ class preOrder extends Component {
         this.props.actions.getAddressList();
     }
 
+    componentWillUnmount() {
+        this.props.actions.updateAddressList(null)
+    }
 
     handleChange(value) {
         this.setState({
             value
         })
-        this.props.actions.postSelAddress({ ID: Taro.getCurrentInstance().router.params.orderID, addressID: value })
     }
 
     handleTextChange = (value, item) => {
@@ -125,7 +138,7 @@ class preOrder extends Component {
             })
             return
         }
-        this.props.actions.postSubmitPreOrder({ ID: Taro.getCurrentInstance().router.params.orderID, detailMemo: this.state.text })
+        this.props.actions.postSubmitPreOrder({ ID: Taro.getCurrentInstance().router.params.orderID, detailMemo: this.state.text, addressID: this.state.value })
     }
 
     handleCancel = () => {
@@ -139,7 +152,7 @@ class preOrder extends Component {
         } else {
             let options = this.props.order.addressList.map(address => {
                 return {
-                    label: address.receiver, value: address.ID, desc: `${address.mobile} ${address.city}${address.district}${address.address}`
+                    label: address.receiver, value: address.ID, desc: `${address.mobile} ${address.full_address}`
                 }
             })
 
@@ -178,6 +191,7 @@ class preOrder extends Component {
                         <View className='at-row at-row__justify--around'>
                             <View className='at-col at-col-4'>选择收件人</View>
                             <View className='at-col at-col-2'><AtButton size="small" type='secondary' onClick={this.handleAddReceiver}>添加</AtButton></View>
+                            <View className='at-col at-col-2'><AtButton size="small" type='secondary' onClick={this.handleEditReceiver}>编辑</AtButton></View>
                         </View>
                     </View>
                     <View>

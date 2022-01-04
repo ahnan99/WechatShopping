@@ -40,33 +40,36 @@ class myAccount extends Component {
     render() {
         if (!this.props.user.member) {
             return (
-                <View>loading</View>
+                <View>
+                    <Popup isOpened={!this.props.user.infoCompleted} />
+                </View>
             )
         }
         const { member } = this.props.user
         return (
             <View className="sub-title">
+                <Popup isOpened={!this.props.user.infoCompleted} />
                 <Text>我的订单</Text>
                 <AtGrid onClick={index => this.handleClickOrderType(index)} data={
                     [
                         {
                             image: 'https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png',
-                            value: `待付款 ${member.countPre>0 ? '('+member.countPre+')' : ''}`,
+                            value: `待付款 ${member.countPre > 0 ? '(' + member.countPre + ')' : ''}`,
                             index: 0
                         },
                         {
                             image: 'https://img10.360buyimg.com/jdphoto/s72x72_jfs/t5872/209/5240187906/2872/8fa98cd/595c3b2aN4155b931.png',
-                            value: `待发货 ${member.count0>0 ? '('+member.count0+')' : ''}`,
+                            value: `待发货 ${member.count0 > 0 ? '(' + member.count0 + ')' : ''}`,
                             index: 1
                         },
                         {
                             image: 'https://img12.360buyimg.com/jdphoto/s72x72_jfs/t10660/330/203667368/1672/801735d7/59c85643N31e68303.png',
-                            value: `待收货 ${member.count1>0 ? '('+member.count1+')' : ''}`,
+                            value: `待收货 ${member.count1 > 0 ? '(' + member.count1 + ')' : ''}`,
                             index: 2
                         },
                         {
                             image: 'https://img14.360buyimg.com/jdphoto/s72x72_jfs/t17251/336/1311038817/3177/72595a07/5ac44618Na1db7b09.png',
-                            value: `退款退货 ${member.count3 + member.count4>0 ? '('+member.count3 + member.count4+')' : ''}`,
+                            value: `退款退货 ${member.count3 + member.count4 > 0 ? '(' + member.count3 + member.count4 + ')' : ''}`,
                             index: 3
                         },
                         {
@@ -82,12 +85,12 @@ class myAccount extends Component {
                     [
                         {
                             image: 'https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png',
-                            value: `积分 ${member.points_onhand>0 ? '('+member.points_onhand+')' : ''}`,
+                            value: `积分 ${member.points_onhand > 0 ? '(' + member.points_onhand + ')' : ''}`,
                             url: '/pages/account/myPoint',
                         },
                         {
                             image: 'https://img20.360buyimg.com/jdphoto/s72x72_jfs/t15151/308/1012305375/2300/536ee6ef/5a411466N040a074b.png',
-                            value: `推荐 ${member.referrer>0 ? '('+member.referrer+')' : ''}`,
+                            value: `推荐 ${member.referrer > 0 ? '(' + member.referrer + ')' : ''}`,
                             url: '/pages/account/myReferee'
                         },
                         {

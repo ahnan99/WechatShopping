@@ -100,7 +100,7 @@ class payment extends Component {
                 <AtModal isOpened={this.state.isOpened}>
                     <AtModalHeader>提示</AtModalHeader>
                     <AtModalContent>
-                        发起支付成功
+                        <Text style='padding: 15px 10px;background-color: #FAFBFC;text-align: left; font-size:1.3em;'>本次付款金额为：{this.props.order.preOrder?.amount}元</Text>
                     </AtModalContent>
                     <AtModalAction> <Button onClick={() => { this.setState({ isOpened: false }); }}>取消</Button> <Button onClick={() => this.handlePay()}>确认支付</Button> </AtModalAction>
                 </AtModal>
@@ -108,7 +108,7 @@ class payment extends Component {
                     <Text>支付金额：{this.props.order.preOrder?.amount}</Text>
                 </View>
                 <View className="pay-title">
-                    <Text>支付类型：{this.props.order.preOrder?.amount}</Text>
+                    <Text>支付类型：微信</Text>
                 </View>
 
                 <View className='at-row at-row__justify--around'>

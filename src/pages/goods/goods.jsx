@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { View, Button, Text, Image } from "@tarojs/components";
-import { AtSearchBar, AtDrawer, AtButton, AtActivityIndicator } from 'taro-ui'
+import { AtSearchBar, AtDrawer, AtButton, AtActivityIndicator, AtModal, AtModalHeader, AtModalContent, AtModalAction  } from 'taro-ui'
 import Taro from '@tarojs/taro'
 import { connect } from "react-redux";
 import Popup from "../account/Popup"
@@ -13,6 +13,7 @@ import "taro-ui/dist/style/components/drawer.scss";
 import "taro-ui/dist/style/components/list.scss";
 import { actions as GoodsActions } from "../../modules/goods";
 import { actions as UserActions } from "../../modules/user";
+import { actions as OrderActions } from "../../modules/order"
 import "./goods.css";
 import API_GOODS from '../../api/goods.json'
 import axios from "taro-axios";
@@ -34,7 +35,9 @@ class goods extends Component {
         super(...arguments)
         this.state = {
             value: '',
-            text: '热门商品'
+            text: '热门商品',
+            isOpened: false,
+            amount: null
         }
         axios.interceptors.response.use((response) => {
             if (response.data && response.data.status === 99) {
@@ -60,14 +63,21 @@ class goods extends Component {
             console.log('chongxindenglu')
             this.componentDidShow()
         }
+
+        if (!prevProps.order.postPayPreOrder && this.props.order.postPayPreOrder) {
+            this.setState({ isOpened: true });
+        }
     }
 
     componentDidShow() {
-        if (!this.checkAuth()) {
+        if (!this.checkAuth()) { 
             this.login()
+    
+        }else{
+            this.props.actions.getGoodsKind();
+            this.props.actions.getTopGoods();
         }
-        this.props.actions.getGoodsKind();
-        this.props.actions.getTopGoods();
+      
     }
 
     onChange(value) {
@@ -105,6 +115,7 @@ class goods extends Component {
     fetchMember = () => {
         //console.log("get member")
         this.props.actions.getMember({ memberID: this.props.user.memberID })
+
     }
 
 
@@ -123,6 +134,12 @@ class goods extends Component {
         this.setState({ show: false, value: '' })
     }
 
+    componentWillUnmount() {
+        if (!this.props.user.memberID) {
+            this.saveAuthToken(null);
+        }
+    }
+
     handleKindClick = kind => {
         this.props.actions.updateTopGoods(null)
         this.props.actions.getGoodsByKind({ kindID: kind.kindID })
@@ -137,32 +154,96 @@ class goods extends Component {
     login = async () => {
         //login
         let res = await Taro.login();
-        
+
         //console.log("login", res)
         //获取token
         let response = await Taro.request({
-            url: `${axios.defaults.baseURL}/users/getAccessToken?code=${res.code}`,
+            url: `${axios.defaults.baseURL}/users/getAccessToken?code=${res.code}&referee=${Taro.getCurrentInstance().router.params.referee}`,
             method: 'GET'
         })
-        console.log(res);
+        //console.log(res);
         //判断是否成功
         if (response.data && response.data.token) {
             //写入token
             let authorize = response.data.token;
             //console.log(response.data.token);
-            if(response.data.status === 0){
+
+
+            if (response.data.status === 0) {
                 this.props.userActions.updateInfoCompleted(true)
-            }else if(response.data.status === 1){
+            } else if (response.data.status === 1) {
                 this.props.userActions.updateInfoCompleted(false)
+            } else {
+                Taro.showToast({
+                    title: response.data.msg,
+                    icon: "error",
+                    duration: 2000
+                })
+                this.props.userActions.updateInfoCompleted(false)
+                return
             }
+
+            
             this.props.userActions.updateSessionKey(response.data.session_key)
             this.props.userActions.updateMemberID(response.data.memberID);
             this.saveAuthToken(authorize);
+            this.props.actions.getGoodsKind();
+            this.props.actions.getTopGoods();
+            if ((response.data.status === 0 || response.data.status === 1) && response.data.membership === 1) {
+                this.props.orderActions.postPayPreOrder({ ID: response.data.preID })
+                this.setState({amount: response.data.amount})
+            }
             return true;
         } else {
             console.log('获取token失败');
+            Taro.showToast({
+                title: response.data.msg,
+                icon: "error",
+                duration: 2000
+            })
             return false;
         }
+    }
+
+    handlePay = () => {
+        if (!this.props.order.postPayPreOrder) {
+            Taro.showToast({
+                title: '获取付款信息失败，请重试',
+                icon: 'error',
+                duration: 2000
+            })
+            this.setState({ isOpened: false });
+            this.props.orderActions.updatePostPayPreOrder(null)
+            return;
+        };
+
+        const { timeStamp, nonceStr, signType, paySign } = this.props.order.postPayPreOrder.data
+        Taro.requestPayment({
+            timeStamp: timeStamp.toString(),
+            nonceStr: nonceStr,
+            package: this.props.order.postPayPreOrder.data.package,
+            signType: signType,
+            paySign: paySign,
+            success(res) {
+                Taro.showToast({
+                    title: '付款成功',
+                    icon: 'success',
+                    duration: 2000
+                })
+            },
+            fail(res) {
+                console.log(res);
+                Taro.showToast({
+                    title: '付款失败',
+                    icon: 'error',
+                    duration: 2000
+                })
+            },
+            complete: (res) => {
+                this.props.orderActions.updatePostPayPreOrder(null);
+                this.setState({ isOpened: false });
+            }
+        })
     }
 
     saveAuthToken = (authorize) => {
@@ -186,6 +267,13 @@ class goods extends Component {
             return (
 
                 <View>
+                    <AtModal isOpened={this.state.isOpened}>
+                        <AtModalHeader>提示</AtModalHeader>
+                        <AtModalContent>
+                            <Text style='padding: 15px 10px;background-color: #FAFBFC;text-align: left; font-size:1.3em;'>请支付年费{this.state.amount}元。</Text>
+                        </AtModalContent>
+                        <AtModalAction> <Button onClick={() => { this.setState({ isOpened: false }); }}>取消</Button> <Button onClick={() => this.handlePay()}>确认支付</Button> </AtModalAction>
+                    </AtModal>
                     <Popup isOpened={!this.props.user.infoCompleted} />
                     <AtSearchBar actionName='搜一下' value={this.state.value} onChange={this.onChange.bind(this)} onActionClick={this.onActionClick.bind(this)} />
                     <View className='at-row at-row__justify--around'>
@@ -215,11 +303,13 @@ class goods extends Component {
 const mapStateToProps = (state) => ({
     goods: state.goods,
     user: state.user,
+    order: state.order
 });
 
 const mapDispatchToProps = (dispatch) => ({
     actions: bindActionCreators(GoodsActions, dispatch),
     userActions: bindActionCreators(UserActions, dispatch),
+    orderActions: bindActionCreators(OrderActions, dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(goods);

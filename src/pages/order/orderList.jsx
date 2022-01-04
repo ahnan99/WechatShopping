@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Button, Text, Image } from "@tarojs/components";
 import Taro from "@tarojs/taro";
-import { AtList, AtListItem, AtTabs, AtTabsPane, AtActivityIndicator } from "taro-ui";
+import { AtList, AtListItem, AtTabs, AtTabsPane, AtActivityIndicator, AtButton } from "taro-ui";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import "taro-ui/dist/style/components/icon.scss";
@@ -56,7 +56,7 @@ class orderList extends Component {
     }
 
     handleOnClickOrder = order => {
-        Taro.navigateTo({ url: `/pages/order/order?orderID=${order.ID}` })
+        Taro.navigateTo({ url: `/pages/order/order?orderID=${order.ID}&billID=${order.billID}` })
     }
 
     render() {
@@ -99,7 +99,7 @@ class orderList extends Component {
                                                         <View className="text-box">
                                                             <View className="goods-title">订单号:{order.orderID}</View>
                                                             <View className="goods-title">{order.goodsName}</View>
-                                                            <View className="goods-price">X&nbsp;{order.qty}&nbsp;&nbsp;&nbsp;总价:¥ {order.price}</View>
+                                                            <View className="goods-price">{order.price}&nbsp;X&nbsp;{order.qty}&nbsp;&nbsp;&nbsp; 总价:¥ {order.price*order.qty}</View>
                                                         </View>
                                                     </View>
                                                 </View>
@@ -143,7 +143,7 @@ class orderList extends Component {
                         <View style='padding: 15px 10px;background-color: #FAFBFC;text-align: left;' ><View>
                             <AtList>
                                 {
-                                    this.props.order.orderList.filter(order => { return order.status >= 3 && order.status <= 8 }).map(order => (
+                                    this.props.order.orderList.filter(order => { return order.status >= 3 && order.status <= 30 }).map(order => (
                                         <View className="goodsList" key={order.ID} onClick={() => this.handleOnClickOrder(order)}>
                                             <View className="a-gooods">
                                                 <View className="a-goods-conts">
@@ -156,6 +156,7 @@ class orderList extends Component {
                                                             <View className="goods-title">{order.goodsName}</View>
                                                             <View className="goods-price">X&nbsp;{order.qty}&nbsp;&nbsp;&nbsp;总价:¥ {order.price}</View>
                                                         </View>
+                                                        <View className="order-title">{order.statusName}</View>
                                                     </View>
                                                 </View>
                                             </View>

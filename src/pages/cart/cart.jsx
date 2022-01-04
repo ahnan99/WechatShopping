@@ -185,6 +185,7 @@ class cart extends Component {
         }
         return (
             <View>
+                <Popup isOpened={!this.props.user.infoCompleted} />
                 <AtForm onSubmit={this.onSubmit.bind(this)}>
                     <CheckboxGroup onChange={this.onCheckBoxChange}>
                         {cartContent.map((item) => (

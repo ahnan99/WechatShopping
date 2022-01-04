@@ -7,7 +7,9 @@ import {
     AtModalContent,
     AtModalAction,
     AtInput,
-    AtActivityIndicator
+    AtActivityIndicator,
+    AtList,
+    AtListItem
 } from 'taro-ui'
 import axios from "taro-axios";
 
@@ -19,6 +21,8 @@ import "taro-ui/dist/style/components/button.scss";
 import "taro-ui/dist/style/components/icon.scss";
 import "taro-ui/dist/style/components/activity-indicator.scss";
 import 'taro-ui/dist/style/components/loading.scss';
+import "taro-ui/dist/style/components/list.scss";
+
 
 import { actions as OrderActions } from "../../modules/order";
 
@@ -42,18 +46,18 @@ class order extends Component {
 
     componentDidUpdate = prevProps => {
         if (!prevProps.order.postCacnelOrder && this.props.order.postCacnelOrder) {
-            if (this.props.order.postCacnelOrder.status === 0) {
-                this.props.actions.updateOrderInfo(null)
-                this.props.actions.getOrderInfo({
-                    ID: Taro.getCurrentInstance().router.params.orderID,
-                });
-                Taro.showToast({
-                    title: '申请成功',
-                    icon: 'success',
-                    duration: 2000
-                })
-                this.handleClose()
-            }
+
+            this.props.actions.updateOrderInfo(null)
+            this.props.actions.getOrderInfo({
+                ID: Taro.getCurrentInstance().router.params.orderID,
+            });
+            Taro.showToast({
+                title: this.props.order.postCacnelOrder.msg,
+                icon: 'none',
+                duration: 5000
+            })
+            this.handleClose()
+
             this.props.actions.updatePostCancelOrder(null)
         }
 
@@ -159,6 +163,10 @@ class order extends Component {
         this.props.actions.getOrderInfo({
             ID: Taro.getCurrentInstance().router.params.orderID,
         });
+        console.log('Bill ID: ', Taro.getCurrentInstance().router.params.billID)
+        this.props.actions.getShippment({
+            bill_no: Taro.getCurrentInstance().router.params.billID,
+        });
     }
 
     componentDidHide() {
@@ -166,7 +174,7 @@ class order extends Component {
     }
 
     handleOnClick = item => {
-        if (item === "申请退款") {
+        if (item === "取消订单") {
             this.setState({ isOpenCacnelOrder: true })
         } else if (item === "撤销退款申请") {
             this.setState({ isOpenRevertCacnelOrder: true })
@@ -250,6 +258,11 @@ class order extends Component {
         this.setState({ refundMemo })
     }
 
+    checkCarrier() {
+        Taro.navigateTo({
+            url: "plugin://kdPlugin/index?num=JD0058924109768&appName=元轻松",
+        })
+    }
 
     render() {
         if (!this.props.order.orderInfo) {
@@ -262,13 +275,13 @@ class order extends Component {
         return (
             <View>
                 <AtModal isOpened={this.state.isOpenCacnelOrder}>
-                    <AtModalHeader>申请退款</AtModalHeader>
+                    <AtModalHeader>取消订单</AtModalHeader>
                     <AtModalContent>
-                        <Text>确定要申请退款么？</Text>
+                        <Text>确定要取消订单吗？</Text>
                         <AtTextarea
                             value={this.state.refundMemo}
                             onChange={this.handleChangeRefundMemo.bind(this)}
-                            placeholder='输入退款理由...' />
+                            placeholder='输入取消原因...' />
                     </AtModalContent>
                     <AtModalAction>
                         <AtButton onClick={this.handleClose} type='secondary' size='small'>取消</AtButton>
@@ -276,9 +289,9 @@ class order extends Component {
                     </AtModalAction>
                 </AtModal>
                 <AtModal isOpened={this.state.isOpenRevertCacnelOrder}>
-                    <AtModalHeader>取消申请退款</AtModalHeader>
+                    <AtModalHeader>撤销退款申请</AtModalHeader>
                     <AtModalContent>
-                        <Text>确定要取消申请退款么？</Text>
+                        <Text>确定要撤销退款申请吗？</Text>
                     </AtModalContent>
                     <AtModalAction>
                         <AtButton onClick={this.handleClose} type='secondary' size='small'>取消</AtButton>
@@ -288,7 +301,7 @@ class order extends Component {
                 <AtModal isOpened={this.state.isOpenGR}>
                     <AtModalHeader>确认收货</AtModalHeader>
                     <AtModalContent>
-                        <Text>确认收货么？</Text>
+                        <Text>确认收货吗？</Text>
                     </AtModalContent>
                     <AtModalAction>
                         <AtButton onClick={this.handleClose} type='secondary' size='small'>取消</AtButton>
@@ -298,11 +311,11 @@ class order extends Component {
                 <AtModal isOpened={this.state.isOpenReturn}>
                     <AtModalHeader>申请退货</AtModalHeader>
                     <AtModalContent>
-                        <Text>确认申请退货么？</Text>
+                        <Text>确认申请退货吗？</Text>
                         <AtTextarea
                             value={this.state.returnMemo}
                             onChange={this.handleChangeReturnMemo.bind(this)}
-                            placeholder='输入退货理由...' />
+                            placeholder='输入退货原因...' />
                     </AtModalContent>
                     <AtModalAction>
                         <AtButton onClick={this.handleClose} type='secondary' size='small'>取消</AtButton>
@@ -310,9 +323,9 @@ class order extends Component {
                     </AtModalAction>
                 </AtModal>
                 <AtModal isOpened={this.state.isOpenRevertReturn}>
-                    <AtModalHeader>取消退货申请</AtModalHeader>
+                    <AtModalHeader>撤销退货申请</AtModalHeader>
                     <AtModalContent>
-                        <Text>确认取消退货申请么？</Text>
+                        <Text>确认撤销退货申请吗？</Text>
                         <AtTextarea
                             value={this.state.returnRevertMemo}
                             onChange={this.handleChangeReturnRevertMemo.bind(this)}
@@ -342,9 +355,9 @@ class order extends Component {
                     </AtModalAction>
                 </AtModal>
                 <AtModal isOpened={this.state.isOpenOrderClose}>
-                    <AtModalHeader>订单关闭</AtModalHeader>
+                    <AtModalHeader>关闭订单</AtModalHeader>
                     <AtModalContent>
-                        <Text>确定要关闭订单么？</Text>
+                        <Text>确定要关闭订单吗？</Text>
                     </AtModalContent>
                     <AtModalAction>
                         <AtButton onClick={this.handleClose} type='secondary' size='small'>取消</AtButton>
@@ -361,22 +374,46 @@ class order extends Component {
                                 <View className="text-box">
                                     <View className="goods-title">订单号:{this.props.order.orderInfo.orderID}</View>
                                     <View className="goods-title">{this.props.order.orderInfo.goodsName}</View>
-                                    <View className="goods-price">X&nbsp;{this.props.order.orderInfo.qty}&nbsp;&nbsp;&nbsp;总价:¥ {this.props.order.orderInfo.price}</View>
+                                    <View className="goods-price">X&nbsp;{this.props.order.orderInfo.qty}&nbsp;&nbsp;&nbsp;总价:¥ {this.props.order.orderInfo.price * this.props.order.orderInfo.qty}</View>
                                 </View>
                             </View>
                         </View>
                     </View>
                 </View>
-
-                {
-                    this.props.order.orderInfo.opItems !== "" ? this.props.order.orderInfo.opItems?.split(",")?.map(item => (
-                        <View>
-                            <View className='at-row at-row__justify--around'>
-                                <View className='at-col at-col-3'> <AtButton circle size="small" type='primary' onClick={() => this.handleOnClick(item)}>{item}</AtButton></View>
+                <View className='at-row at-row__justify--around'>
+                    {
+                        this.props.order.orderInfo.opItems !== "" ? this.props.order.orderInfo.opItems?.split(",")?.map(item => (
+                            <View>
+                                <View className='at-col'> <AtButton circle size="small" type='primary' onClick={() => this.handleOnClick(item)}>{item}</AtButton></View>
                             </View>
-                        </View>
-                    )) : null
+
+                        )) : null
+                    }
+                </View>
+                <View>
+                    <text style={{ color: 'gray', fontSize: '0.8em', margin: '10px' }}>物流信息</text>
+                    {this.props.order.shippment && this.props.order.shippment.data && this.props.order.shippment.data.statusName ?
+                        <text style={{ color: 'red', fontSize: '0.7em', margin: '10px' }}>{this.props.order.shippment.data.statusName}</text>
+                        : null}
+                    {this.props.order.shippment && this.props.order.shippment.data && this.props.order.shippment.data.expressName ?
+                        <text style={{ color: 'gray', fontSize: '0.7em', margin: '10px' }}>{this.props.order.shippment.data.expressName}</text>
+                        : null}
+                </View>
+                <View>
+                    {this.props.order.shippment && this.props.order.shippment.data && this.props.order.shippment.data.number ?
+                        <text style={{ color: 'gray', fontSize: '0.7em', margin: '10px' }}>运单号：{this.props.order.shippment.data.number}</text>
+                        : null}
+                </View>
+                {
+                    this.props.order.shippment && this.props.order.shippment.data && this.props.order.shippment.data.logisticsList ? <View> <AtList>
+                        {this.props.order.shippment.data.logisticsList.map(element => (<AtListItem
+                            title={element.context}
+                            note={element.time}
+                        />))
+                        }
+                    </AtList></View> : <span>暂无物流信息</span>
                 }
+
             </View>
         )
     }

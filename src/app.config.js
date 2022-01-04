@@ -19,6 +19,12 @@ export default {
         navigationBarTitleText: "轻松购",
         navigationBarTextStyle: "black",
     },
+    plugins: {
+        kdPlugin: {
+            version: "1.1.2",
+            provider: "wx6885acbedba59c14"
+        }
+    },
     tabBar: {
         list: [
             {

@@ -48,7 +48,12 @@ const GET_DISTRICT_LIST = "get_distinct_list"
 const UPDATE_DISTRICT_LIST = "update_distinct_list"
 const GET_REGION_LIST = "get_region_list"
 const UPDATE_REGION_LIST = "update_region_list"
-
+const GET_SHIPPMENT = "get_shippment"
+const UPDATE_SHIPMENT = "update_shippment"
+const GET_ADDRESS = "get_address"
+const UPDATE_ADDRESS = "update_address"
+const DELETE_ADDRESS = "delete_address"
+const UPDATE_DELETE_ADDRESS = "update_delete_address"
 
 
 export const types = {
@@ -102,6 +107,12 @@ export const types = {
     UPDATE_DISTRICT_LIST,
     GET_REGION_LIST,
     UPDATE_REGION_LIST,
+    GET_SHIPPMENT,
+    UPDATE_SHIPMENT,
+    GET_ADDRESS,
+    UPDATE_ADDRESS,
+    DELETE_ADDRESS,
+    UPDATE_DELETE_ADDRESS
 };
 
 const postPreOrderCart = (payload) => ({
@@ -149,10 +160,21 @@ const getAddressList = (payload) => ({
     payload,
 });
 
+const updateAddress = (data) => ({
+    type: UPDATE_ADDRESS,
+    data,
+});
+
+const getAddress = (payload) => ({
+    type: GET_ADDRESS,
+    payload,
+});
+
 const updateAddressList = (data) => ({
     type: UPDATE_ADDRESS_LIST,
     data,
 });
+
 
 const postAddress = (payload) => ({
     type: POST_ADDRESS,
@@ -356,6 +378,26 @@ const updateRegionList = (data) => ({
     data,
 });
 
+const getShippment = (payload) => ({
+    type: GET_SHIPPMENT,
+    payload,
+});
+
+const updateShippment = (data) => ({
+    type: UPDATE_SHIPMENT,
+    data,
+});
+
+const deleteAddress = (payload) => ({
+    type: DELETE_ADDRESS,
+    payload,
+});
+
+const updateDeleteAddress = (data) => ({
+    type: UPDATE_DELETE_ADDRESS,
+    data,
+});
+
 
 export const actions = {
     postPreOrderCart,
@@ -407,7 +449,13 @@ export const actions = {
     getDistrictList,
     updateDistrictList,
     getRegionList,
-    updateRegionList
+    updateRegionList,
+    getShippment,
+    updateShippment,
+    updateAddress,
+    getAddress,
+    deleteAddress,
+    updateDeleteAddress
 };
 
 const initialState = {
@@ -434,7 +482,10 @@ const initialState = {
     postOrderClose: null,
     cityList: null,
     regionList: null,
-    districtList: null
+    districtList: null,
+    shippment: null,
+    address: null,
+    deleteAddress: null
 };
 
 const reducer = (state = initialState, action = {}) => {
@@ -461,6 +512,12 @@ const reducer = (state = initialState, action = {}) => {
             return {
                 ...state,
                 preOrderDetail: action.data,
+            };
+        }
+        case UPDATE_SHIPMENT: {
+            return {
+                ...state,
+                shippment: action.data,
             };
         }
         case UPDATE_ADDRESS_LIST: {
@@ -509,6 +566,12 @@ const reducer = (state = initialState, action = {}) => {
             return {
                 ...state,
                 postSubmitPreOrder: action.data,
+            };
+        }
+        case UPDATE_DELETE_ADDRESS: {
+            return {
+                ...state,
+                deleteAddress: action.data,
             };
         }
         case UPDATE_ORDER_LIST: {
@@ -588,6 +651,12 @@ const reducer = (state = initialState, action = {}) => {
                 ...state,
                 cityList: action.data,
             };
+        }
+        case UPDATE_ADDRESS: {
+            return {
+                ...state,
+                address: action.data
+            }
         }
         default: {
             return {
